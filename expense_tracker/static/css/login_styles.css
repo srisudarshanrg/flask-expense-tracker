@@ -1,0 +1,47 @@
+body {
+    background-image: url("https://img.freepik.com/premium-photo/modern-carbon-fiber-texture-background-beautiful-texture-background-bg-paint-texture_1020697-466003.jpg?size=626&ext=jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+form {
+    width: 25%;
+    text-align: center;
+    margin-top: 7%;
+    margin-left: auto;
+    margin-right: auto;
+    color: #fff;
+    border: 2px solid rgb(65, 65, 65);
+    border-radius: 5px;
+    padding: 2%;
+    background-color: #181818;
+}
+
+.btn {
+    width: 100%;
+}
+
+@media (max-width: 1250px) {
+    form {
+        width: 40%;
+    }
+}
+
+@media (max-width: 850px) {
+    form {
+        width: 50%;
+    }
+}
+
+@media (max-width: 550px) {
+    form {
+        width: 60%;
+    }
+}
+
+@media (max-width: 450px) {
+    form {
+        width: 100%;
+        border: none;
+    }
+}

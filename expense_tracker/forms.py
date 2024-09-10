@@ -11,6 +11,6 @@ class RegisterForm(FlaskForm):
     username = StringField(label="Username", validators=[DataRequired(), Length(min=3, max=30)])
     password = PasswordField(label="Password", validators=[DataRequired()])
     password_confirm = PasswordField(label="Confirm Password", validators=[DataRequired(), EqualTo(fieldname="password")])
-    dob = DateTimeField(label="Date of Birth")
+    dob = DateTimeField(label="Date of Birth", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 

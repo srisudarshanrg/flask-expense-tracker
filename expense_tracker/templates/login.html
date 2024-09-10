@@ -1,0 +1,31 @@
+{% extends 'login_layout.html' %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" autocomplete="on">
+        {{form.hidden_tag()}}
+        <h2>Login</h2>
+
+        <br>
+        
+        {{form.credential.label()}}
+        {{form.credential(class="form-control", placeholder="Enter username or email")}}
+
+        <br>
+
+        {{form.password.label()}}
+        {{form.password(class="form-control", placeholder="Enter your password")}}
+
+        <br>
+
+        <a href="{{ url_for('register') }}" role="btn" class="btn btn-dark btn-sm">Or Register</a>
+
+        <br>
+        <br>
+
+        {{form.submit(class="btn btn-primary")}}
+    </form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'login_layout.html' %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" style="margin-top: 5%;" autocomplete="on">
+        {{form.hidden_tag()}}
+        <h2>Register</h2>
+
+        <br>
+
+        {{form.username.label()}}
+        {{form.username(class="form-control", placeholder="Enter a username with minimum 3 characters")}}
+
+        <br>
+
+        {{form.password.label()}}
+        {{form.password(class="form-control", placeholder="Enter a password for your account")}}
+
+        <br>
+
+        {{form.password_confirm.label()}}
+        {{form.password_confirm(class="form-control", placeholder="Confirm your password")}}
+
+        <br>
+
+        {{form.dob.label()}}
+        {{form.dob(class="form-control", placeholder="Enter your date of birth")}}
+
+        <br>
+
+        <a href="{{ url_for('login') }}" role="btn" class="btn btn-dark btn-sm">Or Login</a>
+
+        <br>
+        <br>
+
+        {{form.submit(class="btn btn-primary")}}
+    </form>
+{% endblock %}
