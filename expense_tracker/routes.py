@@ -10,12 +10,14 @@ import datetime
 @app.route("/expenses", methods=["GET", "POST"])
 @login_required
 def expense_tracker():
-    return render_template("home.html")
+    user_details = User.query.filter_by(id=current_user.id).first()
+    return render_template("home.html", user_details=user_details)
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    return render_template("profile.html")
+    user_details = User.query.filter_by(id=current_user.id).first()
+    return render_template("profile.html", details=user_details)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -67,3 +69,9 @@ def register():
             flash(message=f"{error}", category="danger")
 
     return render_template("register.html", form=register_form)
+
+@app.route("/logout")
+def logout():
+    logout_user
+    flash(message="You have been logged out", category="info")
+    return redirect(url_for("login"))
