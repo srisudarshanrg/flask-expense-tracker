@@ -40,6 +40,24 @@ def expense_tracker():
         flash(f"Expense \"{name_entered}\" for month {month_entered} created")
 
         return redirect(url_for("expense_tracker"))
+    
+    if search_expense_form.validate_on_submit():
+        searched = str(search_expense_form.search_expense.data)
+        searched = searched.lower()
+
+        results = Expenses.query.filter_by(
+            expense_user=current_user.id
+        )\
+        .filter(Expenses.expense.like(f"{searched}")).all() #backslash is used to continue it to next line
+
+        return render_template("home.html",
+                           user_details=user_details,
+                           search=search_expense_form,
+                           expenses=expenses,
+                           current_month=current_month,
+                           add=add_expense_form,
+                           results=results
+                           )
 
     return render_template("home.html",
                            user_details=user_details,
