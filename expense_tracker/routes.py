@@ -89,11 +89,30 @@ def expense_tracker():
                             month_search=search_month_form,
                            )
     
-    # if define_budget_form.validate_on_submit and define_budget_form.errors == {}:
-    #     new_budget = Budget(
-    #         budget=int(define_budget_form.def_budget.data)
-    #         budget_month="",
-    #     )
+    if define_budget_form.validate_on_submit() and define_budget_form.errors == {}:
+        new_budget = Budget(
+            budget=int(define_budget_form.def_budget.data),
+            budget_month=define_budget_form.budget_month.data,
+            budget_year=datetime.datetime.now().year,
+            budget_user=current_user.id
+        )
+
+        db.session.add(new_budget)
+        db.session.commit()
+
+        get_budget = Budget.query.filter_by(budget_user=current_user.id, budget_month=define_budget_form.budget_month.data).first()
+        return render_template("home.html",
+                                user_details=user_details,
+                                search=search_expense_form,
+                                expenses=expenses,
+                                current_month=current_month,
+                                add=add_expense_form,
+                                results=results,
+                                total_spent=total_cost,
+                                budget_define=define_budget_form,
+                                month_search=search_month_form,
+                                budget=get_budget.budget,
+                            )
 
     return render_template("home.html",
                             user_details=user_details,
@@ -104,7 +123,7 @@ def expense_tracker():
                             total_spent=total_cost,
                             budget_define=define_budget_form,
                             month_search=search_month_form,
-                           )
+                            )
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required

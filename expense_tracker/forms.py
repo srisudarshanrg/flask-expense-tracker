@@ -43,7 +43,7 @@ class AddExpenseForm(FlaskForm):
         ('October', 'October'),
         ('November', 'November'),
         ('December', 'December'),
-    ], validators=[DataRequired()])
+    ], default=current_month, validators=[DataRequired()])
     cost = IntegerField(label="Expense Amount", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
@@ -69,5 +69,19 @@ class SearchExpenseForm(FlaskForm):
     submit = SubmitField(label="Search")
 
 class DefineBudgetForm(FlaskForm):
-    def_budget = IntegerField(label="Define Budget", validators=[DataRequired()])
+    def_budget = IntegerField(label="Specify a budget", validators=[DataRequired()])
+    budget_month = SelectField('Month', choices=[
+        ('January', 'January'),
+        ('February', 'February'),
+        ('March', 'March'),
+        ('April', 'April'),
+        ('May', 'May'),
+        ('June', 'June'),
+        ('July', 'July'),
+        ('August', 'August'),
+        ('September', 'September'),
+        ('October', 'October'),
+        ('November', 'November'),
+        ('December', 'December'),
+    ], default=current_month, validators=[DataRequired()])
     submit = SubmitField(label="Search")
