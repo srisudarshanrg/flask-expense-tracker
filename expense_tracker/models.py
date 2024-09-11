@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
 class Expenses(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     expense = db.Column(db.String(), nullable=False)
+    desc = db.Column(db.String(), nullable=False)
     month = db.Column(db.String(), nullable=False)
     cost = db.Column(db.Integer(), nullable=False)
     expense_user = db.Column(db.Integer(), db.ForeignKey("user.id"))

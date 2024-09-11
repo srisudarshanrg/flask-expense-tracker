@@ -1,5 +1,5 @@
 from expense_tracker import app, db
-from expense_tracker.forms import LoginForm, RegisterForm
+from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm
 from expense_tracker.models import User, Expenses
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user, current_user
@@ -11,7 +11,43 @@ import datetime
 @login_required
 def expense_tracker():
     user_details = User.query.filter_by(id=current_user.id).first()
-    return render_template("home.html", user_details=user_details)
+
+    current_month = datetime.datetime.now()
+    current_month = current_month.strftime("%B")
+
+    search_expense_form = SearchExpenseForm()
+    add_expense_form = AddExpenseForm()
+
+    expenses = Expenses.query.filter_by(expense_user=current_user.id, month=current_month).all()
+
+    if add_expense_form.validate_on_submit():
+        name_entered = add_expense_form.expense.data
+        desc_entered = add_expense_form.desc.data
+        month_entered = add_expense_form.month.data
+        cost_entered = int(add_expense_form.cost.data)
+
+        new_expense = Expenses(
+            expense=name_entered,
+            desc=desc_entered,
+            month=month_entered,
+            cost=cost_entered,
+            expense_user=current_user.id,
+        )
+
+        db.session.add(new_expense)
+        db.session.commit()
+
+        flash(f"Expense \"{name_entered}\" for month {month_entered} created")
+
+        return redirect(url_for("expense_tracker"))
+
+    return render_template("home.html",
+                           user_details=user_details,
+                           search=search_expense_form,
+                           expenses=expenses,
+                           current_month=current_month,
+                           add=add_expense_form,
+                           )
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required

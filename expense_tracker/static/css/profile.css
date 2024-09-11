@@ -1,0 +1,114 @@
+
+body {
+    background-color: #f0f2f5; 
+    font-family: 'Roboto', sans-serif; 
+    color: #333; 
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    background: #e6e3e3; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.back-home {
+    font-size: 16px;
+    color: #007BFF; 
+    background-color: #ffffff; 
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #007BFF; 
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    margin-bottom: 20px;
+    margin-right: 1450px;
+    width: 150px;
+
+}
+
+.back-home:hover {
+    background-color: #007BFF;
+    color: #ffffff;
+    border-color: #007BFF;
+}
+
+
+.username-box {
+    text-align: center;
+    border-radius: 10px;
+    background-color: #ffffff; 
+    color: #333; 
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    font-weight: bold;
+}
+
+
+.row {
+    gap: 20px;
+    max-width: 1200px;
+    flex-wrap: wrap; 
+}
+
+
+.card {
+    background-color: #ffffff; 
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+    background-color: #f9fafb; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #007BFF; 
+    font-weight: bold;
+}
+
+.card p {
+    margin: 10px 0 0;
+    font-size: 16px;
+}
+
+
+.button-container {
+    text-align: center;
+    margin: auto 0 20px;
+}
+
+
+.transfer-button {
+    background-color: #007BFF;
+    border: none;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.transfer-button:hover {
+    background-color: #0056b3; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}

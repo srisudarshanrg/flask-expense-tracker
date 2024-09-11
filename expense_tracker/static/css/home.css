@@ -1,0 +1,45 @@
+.logout {
+    margin-right: 45px;
+}
+
+.nav-link {
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #0E6bff;
+    transition: 0.3s;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.margined-left {
+    margin-left: 45px;
+}
+
+body {
+    color: #fff;
+    background-color: rgb(28, 28, 28);
+}
+
+.expenses-div {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 10px;
+}
+
+@media (max-width: 1000px) {
+    .logout {
+        margin-right: 0;
+    }
+
+    .margined-left {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 450px) {
+    .expenses-div {
+        grid-template-columns: auto;
+    }
+}

@@ -3,11 +3,13 @@ from wtforms import IntegerField, validators, StringField, PasswordField, Submit
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from expense_tracker.models import User
 
+# LoginForm is the form handling the login form
 class LoginForm(FlaskForm):
     username = StringField(label="Username", validators=[DataRequired()])
     password = PasswordField(label="Password", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
+# RegisterForm is the form handling the register form
 class RegisterForm(FlaskForm):
     def validate_username(self, username_attempted):
         check_exists_user = User.query.filter_by(username=username_attempted.data).all()
@@ -21,3 +23,13 @@ class RegisterForm(FlaskForm):
     age = IntegerField(label="Age(in numbers)", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
+class AddExpenseForm(FlaskForm):
+    expense = StringField(label="Name of Expense", validators=[DataRequired()])
+    desc = StringField(label="Description (optional)", validators=[])
+    month = StringField(label="Expense Month", validators=[DataRequired()])
+    cost = IntegerField(label="Expense Amount", validators=[DataRequired()])
+    submit = SubmitField(label="Submit")
+
+class SearchExpenseForm(FlaskForm):
+    search_expense = StringField(label="Search", validators=[DataRequired()])
+    submit = SubmitField(label="Search")
