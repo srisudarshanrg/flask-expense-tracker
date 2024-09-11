@@ -28,6 +28,10 @@ body {
     gap: 10px;
 }
 
+.card {
+    border: 1px solid #fff;
+}
+
 @media (max-width: 1000px) {
     .logout {
         margin-right: 0;

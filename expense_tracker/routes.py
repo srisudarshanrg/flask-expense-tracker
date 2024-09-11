@@ -48,7 +48,7 @@ def expense_tracker():
         results = Expenses.query.filter_by(
             expense_user=current_user.id
         )\
-        .filter(Expenses.expense.like(f"{searched}")).all() #backslash is used to continue it to next line
+        .filter(Expenses.expense.contains(f"{searched}")).all() #backslash is used to continue it to next line
 
         return render_template("home.html",
                            user_details=user_details,

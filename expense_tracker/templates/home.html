@@ -9,6 +9,57 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
 <body>
+    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-bs-scroll="true">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">ADD AN EXPENSE</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form action="" method="post">
+                {{add.hidden_tag()}}
+
+                {{add.expense.label()}}
+                {{add.expense(class="form-control", placeholder="Enter name for your expense")}}
+
+                <br>
+
+                {{add.desc.label()}}
+                {{add.desc(class="form-control", placeholder="Describe your expense")}}
+
+                <br>
+
+                {{add.month.label()}}
+                {{add.month(class="form-control", placeholder="Choose month for expense", list="months")}}
+
+                <br>
+
+                {{add.cost.label()}}
+                {{add.cost(class="form-control", placeholder="Enter cost amount for this expense")}}
+
+                <br>
+                <br>
+
+                {{add.submit(class="btn btn-success", style="width: 100%;")}}
+            </form>
+        </div>
+        </div>
+    </div>
+
+    <datalist id="months">
+        <option value="January"></option>
+        <option value="February"></option>
+        <option value="March"></option>
+        <option value="April"></option>
+        <option value="May"></option>
+        <option value="June"></option>
+        <option value="July"></option>
+        <option value="August"></option>
+        <option value="September"></option>
+        <option value="October"></option>
+        <option value="November"></option>
+        <option value="December"></option>
+    </datalist>
+
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ url_for('expense_tracker') }}">RaptorExpense</a>
@@ -39,85 +90,53 @@
     </nav>
 
     {% with messages = get_flashed_messages(with_categories=True) %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    {{ message }}
-                </div>
-            {% endfor %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ message }}
+            </div>
+        {% endfor %}
     {% endwith %}
 
     <div class="row" style="padding-left: 15px; padding-top: 15px; width:100%;">
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-            <form action="" method="post" autocomplete="on">
+            <form action="" method="post">
                 {{search.hidden_tag()}}
                 <h3>Search For Expense</h3>
-                {{search.search_expense(class="form-control", placeholder="Search for expense by name", list="months")}}
-                <datalist id="months">
-                    <option value="January"></option>
-                    <option value="February"></option>
-                    <option value="March"></option>
-                    <option value="April"></option>
-                    <option value="May"></option>
-                    <option value="June"></option>
-                    <option value="July"></option>
-                    <option value="August"></option>
-                    <option value="September"></option>
-                    <option value="October"></option>
-                    <option value="November"></option>
-                    <option value="December"></option>
-                </datalist>
+                {{search.search_expense(class="form-control", placeholder="Search for expense by name")}}
 
-                <br>
+                <br>               
 
                 {{search.submit(class="btn btn-primary", style="width: 100%;")}}
             </form>
 
             <br>
 
-            <button class="btn btn-success" style="width: 100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="fa-solid fa-plus"></i> Add Expense</button>
-            <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">ADD AN EXPENSE</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <form action="" method="post">
-                        {{add.hidden_tag()}}
+            {% if results %}
+                <h3>Results <button class="btn btn-danger btn-close" style="color: #fff;"></button></h3>
+                {% for result in results %}                    
+                    <div class="card text-bg-dark">
+                        <div class="card-header" style="border-bottom: 1px solid #fff;">{{result.expense}}</div>
+                        <div class="card-body text-start">
+                            <p><b>Description:</b> {{result.desc}}</p>
+                            <p><b>Month:</b> {{result.month}}</p>
+                        </div>
+                        <div class="card-footer text-bg-success" style="height: 10%;">
+                            <p><b>Cost:</b> {{result.cost}}</p>
+                        </div>
+                    </div>
+                    <br>
+                {% endfor %}
+            {% endif %}
+        </div>     
 
-                        {{add.expense.label()}}
-                        {{add.expense(class="form-control", placeholder="Enter name for your expense")}}
-
-                        <br>
-
-                        {{add.desc.label()}}
-                        {{add.desc(class="form-control", placeholder="Describe your expense")}}
-
-                        <br>
-
-                        {{add.month.label()}}
-                        {{add.month(class="form-control", placeholder="Choose month for expense", list="months")}}
-
-                        <br>
-
-                        {{add.cost.label()}}
-                        {{add.cost(class="form-control", placeholder="Enter cost amount for this expense")}}
-
-                        <br>
-                        <br>
-
-                        {{add.submit(class="btn btn-success", style="width: 100%;")}}
-                    </form>
-                </div>
-                </div>
-            </div>
-
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
-            <h1>Your Expenses for {{current_month}}</h1>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">                 
+            <h1>Your Expenses for {{current_month}} <button class="btn btn-success" style="width: 100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="fa-solid fa-plus"></i> Add Expense</button></h1>
+            <br>
             <div class="expenses-div">
                 {% for expense in expenses %}
-                    <div class="card border-light text-bg-dark">
-                        <div class="card-header text-center">{{expense.expense}}</div>
+                    <div class="card text-bg-dark">
+                        <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
                         <div class="card-body text-start">
                             <p><b>Description:</b> {{expense.desc}}</p>
                             <p><b>Month:</b> {{expense.month}}</p>
@@ -130,7 +149,12 @@
             </div>            
         </div>
 
-        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center">
+            <h1>Budget Calculations</h1>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary">Define budget for {{current_month}}</button>
+                <button class="btn btn-primary">Calculate with Budget</button>
+            </div>
             
         </div>
     </div>
