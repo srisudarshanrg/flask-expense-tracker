@@ -1,5 +1,6 @@
+from random import choice
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, validators, StringField, PasswordField, SubmitField, DateTimeField
+from wtforms import IntegerField, validators, StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from expense_tracker.models import User
 
@@ -26,7 +27,20 @@ class RegisterForm(FlaskForm):
 class AddExpenseForm(FlaskForm):
     expense = StringField(label="Name of Expense", validators=[DataRequired()])
     desc = StringField(label="Description (optional)", validators=[])
-    month = StringField(label="Expense Month", validators=[DataRequired()])
+    month = SelectField('Month', choices=[
+        ('January', 'January'),
+        ('Febraury', 'Febraury'),
+        ('March', 'March'),
+        ('April', 'April'),
+        ('May', 'May'),
+        ('June', 'June'),
+        ('July', 'July'),
+        ('August', 'August'),
+        ('September', 'September'),
+        ('October', 'October'),
+        ('November', 'November'),
+        ('December', 'December'),
+    ])
     cost = IntegerField(label="Expense Amount", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
