@@ -45,20 +45,28 @@
         </div>
     </div>
 
-    <!-- <datalist id="months">
-        <option value="January"></option>
-        <option value="February"></option>
-        <option value="March"></option>
-        <option value="April"></option>
-        <option value="May"></option>
-        <option value="June"></option>
-        <option value="July"></option>
-        <option value="August"></option>
-        <option value="September"></option>
-        <option value="October"></option>
-        <option value="November"></option>
-        <option value="December"></option>
-    </datalist> -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="color: #000;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Define Budget for {{current_month}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post">
+                        {{budget_define.hidden_tag()}}
+
+                        {{budget_define.def_budget.label()}}
+                        <br>
+                        {{budget_define.def_budget(class="form-control", placeholder="Define budget")}}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
         <div class="container-fluid">
@@ -130,32 +138,50 @@
             {% endif %}
         </div>     
 
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">                 
-            <h1>Your Expenses for {{current_month}} <button class="btn btn-success" style="width: 100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="fa-solid fa-plus"></i> Add Expense</button></h1>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+            <form action="" method="post">
+                {{month_search.hidden_tag()}}
+
+                {{month_search.search_month(class="month-search")}}
+
+                {{month_search.submit(class="btn btn-primary btn-sm month-search-submit")}}
+            </form>                
+            <h1>Your Expenses <button class="btn btn-success" style="width: 100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="fa-solid fa-plus"></i> Add Expense</button></h1>
             <br>
             <div class="expenses-div">
-                {% for expense in expenses %}
-                    <div class="card text-bg-dark">
-                        <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
-                        <div class="card-body text-start">
-                            <p><b>Description:</b> {{expense.desc}}</p>
-                            <p><b>Month:</b> {{expense.month}}</p>
+                {% if month_expenses %}
+                    {% for expense in month_expenses %}
+                        <div class="card text-bg-dark">
+                            <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
+                            <div class="card-body text-start">
+                                <p><b>Description:</b> {{expense.desc}}</p>
+                                <p><b>Month:</b> {{expense.month}}</p>
+                            </div>
+                            <div class="card-footer text-bg-success" style="height: 20%;">
+                                <p><b>Cost:</b> {{expense.cost}}</p>
+                            </div>
                         </div>
-                        <div class="card-footer text-bg-success" style="height: 20%;">
-                            <p><b>Cost:</b> {{expense.cost}}</p>
+                    {% endfor %}
+                {% else %}
+                    {% for expense in expenses %}
+                        <div class="card text-bg-dark">
+                            <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
+                            <div class="card-body text-start">
+                                <p><b>Description:</b> {{expense.desc}}</p>
+                                <p><b>Month:</b> {{expense.month}}</p>
+                            </div>
+                            <div class="card-footer text-bg-success" style="height: 20%;">
+                                <p><b>Cost:</b> {{expense.cost}}</p>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% endif %}
             </div>            
         </div>
 
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 text-center">
-            <h1>Budget Calculations</h1>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-primary">Define budget for {{current_month}}</button>
-                <button class="btn btn-primary">Calculate with Budget</button>
-            </div>
-            
+            <h1>Budget</h1>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Specify Budget</button>            
         </div>
     </div>
 

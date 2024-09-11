@@ -1,6 +1,6 @@
 from expense_tracker import app, db
-from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm
-from expense_tracker.models import User, Expenses
+from expense_tracker.forms import DefineBudgetForm, LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
+from expense_tracker.models import Budget, User, Expenses
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from expense_tracker.functions import HashPassword, CheckPasswordHash
@@ -18,13 +18,24 @@ def expense_tracker():
     search_expense_form = SearchExpenseForm()
     add_expense_form = AddExpenseForm()
 
+    define_budget_form = DefineBudgetForm()
+
+    search_month_form = SearchMonthForm()
+
     expenses = Expenses.query.filter_by(expense_user=current_user.id, month=current_month).all()
 
-    if add_expense_form.validate_on_submit():
+    cost_list = []
+    for expense in expenses:
+        cost_list.append(expense.cost)
+
+    total_cost = sum(cost_list)
+
+    if add_expense_form.validate_on_submit() and add_expense_form.errors == {}:
         name_entered = add_expense_form.expense.data
         desc_entered = add_expense_form.desc.data
         month_entered = add_expense_form.month.data
         cost_entered = int(add_expense_form.cost.data)
+        year = datetime.datetime.now().year
 
         new_expense = Expenses(
             expense=name_entered,
@@ -32,6 +43,7 @@ def expense_tracker():
             month=month_entered,
             cost=cost_entered,
             expense_user=current_user.id,
+            year=year,
         )
 
         db.session.add(new_expense)
@@ -41,7 +53,22 @@ def expense_tracker():
 
         return redirect(url_for("expense_tracker"))
     
-    if search_expense_form.validate_on_submit():
+    # handles form for search month form
+    if search_month_form.validate_on_submit() and search_expense_form.errors == {}:
+        month_expenses = Expenses.query.filter_by(expense_user=current_user.id, month=search_month_form.search_month.data)
+        return render_template("home.html",
+                                user_details=user_details,
+                                search=search_expense_form,
+                                expenses=expenses,
+                                current_month=current_month,
+                                add=add_expense_form,
+                                total_spent=total_cost,
+                                budget_define=define_budget_form,
+                                month_search=search_month_form,
+                                month_expenses=month_expenses,
+                            )
+
+    if search_expense_form.validate_on_submit() and add_expense_form.errors == {}:
         searched = str(search_expense_form.search_expense.data)
         searched = searched.lower()
 
@@ -51,26 +78,44 @@ def expense_tracker():
         .filter(Expenses.expense.contains(f"{searched}")).all() #backslash is used to continue it to next line
 
         return render_template("home.html",
-                           user_details=user_details,
-                           search=search_expense_form,
-                           expenses=expenses,
-                           current_month=current_month,
-                           add=add_expense_form,
-                           results=results
+                            user_details=user_details,
+                            search=search_expense_form,
+                            expenses=expenses,
+                            current_month=current_month,
+                            add=add_expense_form,
+                            results=results,
+                            total_spent=total_cost,
+                            budget_define=define_budget_form,
+                            month_search=search_month_form,
                            )
+    
+    # if define_budget_form.validate_on_submit and define_budget_form.errors == {}:
+    #     new_budget = Budget(
+    #         budget=int(define_budget_form.def_budget.data)
+    #         budget_month="",
+    #     )
 
     return render_template("home.html",
-                           user_details=user_details,
-                           search=search_expense_form,
-                           expenses=expenses,
-                           current_month=current_month,
-                           add=add_expense_form,
+                            user_details=user_details,
+                            search=search_expense_form,
+                            expenses=expenses,
+                            current_month=current_month,
+                            add=add_expense_form,
+                            total_spent=total_cost,
+                            budget_define=define_budget_form,
+                            month_search=search_month_form,
                            )
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    user_details = User.query.filter_by(id=current_user.id).first()
+    get_user = User.query.filter_by(id=current_user.id).first()
+    user_details = {
+        "username": get_user.username,
+        "dob": get_user.dob.strftime("%d %B %Y"),
+        "join_date": get_user.join_date.strftime("%d %B %Y"),
+        "age": get_user.age,  
+    }
     return render_template("profile.html", details=user_details)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -102,15 +147,13 @@ def register():
         dob_entered = register_form.dob.data
 
         current_date = datetime.datetime.now()
-        join_date = current_date.strftime("%d-%m-%Y")
 
         new_user = User(
             username=username_entered,
             password=password_hash,
-            # dob=datetime.datetime.strptime(dob_entered),
             dob=dob_entered,
             age=int(age_entered),
-            join_date=join_date,
+            join_date=current_date,
         )
 
         db.session.add(new_user)
