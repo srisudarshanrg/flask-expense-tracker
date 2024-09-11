@@ -44,6 +44,7 @@ def register():
         username_entered = register_form.username.data
         password_entered = register_form.password.data
         password_hash = HashPassword(password_entered).encode("utf-8")
+        age_entered = register_form.age.data
         dob_entered = register_form.dob.data
 
         current_date = datetime.datetime.now()
@@ -54,6 +55,7 @@ def register():
             password=password_hash,
             # dob=datetime.datetime.strptime(dob_entered),
             dob=dob_entered,
+            age=int(age_entered),
             join_date=join_date,
         )
 

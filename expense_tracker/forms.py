@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import validators, StringField, PasswordField, SubmitField, DateTimeField
+from wtforms import IntegerField, validators, StringField, PasswordField, SubmitField, DateTimeField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from expense_tracker.models import User
 
@@ -17,6 +17,7 @@ class RegisterForm(FlaskForm):
     username = StringField(label="Username", validators=[DataRequired(), Length(min=3, max=30)])
     password = PasswordField(label="Password", validators=[DataRequired()])
     password_confirm = PasswordField(label="Confirm Password", validators=[DataRequired(), EqualTo(fieldname="password")])
-    dob = StringField(label="Date of Birth", validators=[DataRequired()])
+    dob = StringField(label="Date of Birth(dd-mm-yyyy)", validators=[DataRequired()])
+    age = IntegerField(label="Age(in numbers)", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 

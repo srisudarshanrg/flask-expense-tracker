@@ -11,6 +11,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(length=30), unique=True)
     password = db.Column(db.String(), nullable=False)
     dob = db.Column(db.String(), nullable=False)
+    age = db.Column(db.Integer(), nullable=False)
     join_date = db.Column(db.String(), nullable=False)
     expenses = db.relationship("Expenses", backref="user", lazy=True)
 
