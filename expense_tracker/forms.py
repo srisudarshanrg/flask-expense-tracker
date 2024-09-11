@@ -1,6 +1,5 @@
-from random import choice
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, validators, StringField, PasswordField, SubmitField, SelectField
+from wtforms import IntegerField, StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from expense_tracker.models import User
 
