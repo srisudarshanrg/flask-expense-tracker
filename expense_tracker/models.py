@@ -21,7 +21,18 @@ class Expenses(db.Model):
     desc = db.Column(db.String(), nullable=False)
     month = db.Column(db.String(), nullable=False)
     cost = db.Column(db.Integer(), nullable=False)
+    year = db.Column(db.Integer(), nullable=False)
     expense_user = db.Column(db.Integer(), db.ForeignKey("user.id"))
 
     def __repr__(self):
         return f"Note: {self.note_head} is for user whose id is {self.note_user}"
+    
+class Budget(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    budget = db.Column(db.Integer(), nullable=False)
+    budget_month = db.Column(db.String(), nullable=False)
+    budget_year = db.Column(db.Integer(), nullable=False)
+    budget_user = db.Column(db.Integer(), db.ForeignKey("user.id"))
+
+    def __repr__(self) -> str:
+        return f"This budget is for user of user id {self.budget_user} for the month {self.budget_month}"

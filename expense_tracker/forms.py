@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, validators, StringField, PasswordField, SubmitField, DateTimeField
+from wtforms import IntegerField, StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
 from expense_tracker.models import User
 
@@ -26,10 +26,49 @@ class RegisterForm(FlaskForm):
 class AddExpenseForm(FlaskForm):
     expense = StringField(label="Name of Expense", validators=[DataRequired()])
     desc = StringField(label="Description (optional)", validators=[])
-    month = StringField(label="Expense Month", validators=[DataRequired()])
+    month = SelectField('Month', choices=[
+        ('January', 'January'),
+        ('February', 'February'),
+        ('March', 'March'),
+        ('April', 'April'),
+        ('May', 'May'),
+        ('June', 'June'),
+        ('July', 'July'),
+        ('August', 'August'),
+        ('September', 'September'),
+        ('October', 'October'),
+        ('November', 'November'),
+        ('December', 'December'),
+    ], validators=[DataRequired()])
+    submit = SubmitField(label="Select")
     cost = IntegerField(label="Expense Amount", validators=[DataRequired()])
     submit = SubmitField(label="Submit")
 
 class SearchExpenseForm(FlaskForm):
     search_expense = StringField(label="Search", validators=[DataRequired()])
     submit = SubmitField(label="Search")
+
+class SearchMonthForm(FlaskForm):
+    search_month = SelectField('Month', choices=[
+        ('January', 'January'),
+        ('February', 'February'),
+        ('March', 'March'),
+        ('April', 'April'),
+        ('May', 'May'),
+        ('June', 'June'),
+        ('July', 'July'),
+        ('August', 'August'),
+        ('September', 'September'),
+        ('October', 'October'),
+        ('November', 'November'),
+        ('December', 'December'),
+    ], validators=[DataRequired()])
+    submit = SubmitField(label="Select")
+
+# class SearchExpenseForm(FlaskForm):
+#     search_expense = StringField(label="Search", validators=[DataRequired()])
+#     submit = SubmitField(label="Search")
+
+# class DefineBudgetForm(FlaskForm):
+#     def_budget = IntegerField(label="Define Budget", validators=[DataRequired()])
+#     submit = SubmitField(label="Search")

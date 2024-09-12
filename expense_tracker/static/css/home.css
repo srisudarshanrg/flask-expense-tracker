@@ -17,6 +17,17 @@
     margin-left: 45px;
 }
 
+.month-dropdown {
+    border: none;
+    border-radius: 3px;
+    width: 60%;
+    padding: 2px;
+}
+
+.month-search-submit {
+    margin-bottom: 5px;
+}
+
 body {
     color: #fff;
     background-color: rgb(28, 28, 28);

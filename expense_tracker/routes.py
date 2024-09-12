@@ -1,5 +1,5 @@
 from expense_tracker import app, db
-from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm
+from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
 from expense_tracker.models import User, Expenses
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user, current_user
@@ -18,19 +18,24 @@ def expense_tracker():
     search_expense_form = SearchExpenseForm()
     add_expense_form = AddExpenseForm()
 
+    month_dropdown = SearchMonthForm()
+
     expenses = Expenses.query.filter_by(expense_user=current_user.id, month=current_month).all()
 
+    # form validation for adding an expense
     if add_expense_form.validate_on_submit():
         name_entered = add_expense_form.expense.data
         desc_entered = add_expense_form.desc.data
         month_entered = add_expense_form.month.data
         cost_entered = int(add_expense_form.cost.data)
+        year = datetime.datetime.now().year
 
         new_expense = Expenses(
             expense=name_entered,
             desc=desc_entered,
             month=month_entered,
             cost=cost_entered,
+            year=year,
             expense_user=current_user.id,
         )
 
@@ -41,6 +46,7 @@ def expense_tracker():
 
         return redirect(url_for("expense_tracker"))
     
+    # form validation for searching an expense
     if search_expense_form.validate_on_submit():
         searched = str(search_expense_form.search_expense.data)
         searched = searched.lower()
@@ -48,7 +54,7 @@ def expense_tracker():
         results = Expenses.query.filter_by(
             expense_user=current_user.id
         )\
-        .filter(Expenses.expense.like(f"{searched}")).all() #backslash is used to continue it to next line
+        .filter(Expenses.expense.contains(f"{searched}")).all() #backslash is used to continue it to next line
 
         return render_template("home.html",
                            user_details=user_details,
@@ -56,7 +62,8 @@ def expense_tracker():
                            expenses=expenses,
                            current_month=current_month,
                            add=add_expense_form,
-                           results=results
+                           results=results,
+                           month_search=month_dropdown,
                            )
 
     return render_template("home.html",
@@ -65,6 +72,7 @@ def expense_tracker():
                            expenses=expenses,
                            current_month=current_month,
                            add=add_expense_form,
+                           month_search=month_dropdown,
                            )
 
 @app.route("/profile", methods=["GET", "POST"])
@@ -100,17 +108,17 @@ def register():
         password_hash = HashPassword(password_entered).encode("utf-8")
         age_entered = register_form.age.data
         dob_entered = register_form.dob.data
+        dob_entered = dob_entered
 
         current_date = datetime.datetime.now()
-        join_date = current_date.strftime("%d-%m-%Y")
+        current_date = current_date.strftime("%d %B %Y")
 
         new_user = User(
             username=username_entered,
             password=password_hash,
-            # dob=datetime.datetime.strptime(dob_entered),
             dob=dob_entered,
             age=int(age_entered),
-            join_date=join_date,
+            join_date=current_date,
         )
 
         db.session.add(new_user)
