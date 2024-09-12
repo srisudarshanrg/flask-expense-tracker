@@ -120,10 +120,7 @@ def register():
         dob_entered = dob_entered
 
         current_date = datetime.datetime.now()
-<<<<<<< HEAD
         current_date = current_date.strftime("%d %B %Y")
-=======
->>>>>>> 5d405766efd26d5c66afef191cd4e8a06cb6a239
 
         new_user = User(
             username=username_entered,
