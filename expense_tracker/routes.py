@@ -37,6 +37,7 @@ def expense_tracker():
             cost=cost_entered,
             year=year,
             expense_user=current_user.id,
+            year=year,
         )
 
         db.session.add(new_expense)
@@ -65,6 +66,8 @@ def expense_tracker():
                            results=results,
                            month_search=month_dropdown,
                            )
+    
+    
 
     return render_template("home.html",
                            user_details=user_details,
@@ -78,7 +81,13 @@ def expense_tracker():
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
 def profile():
-    user_details = User.query.filter_by(id=current_user.id).first()
+    get_user = User.query.filter_by(id=current_user.id).first()
+    user_details = {
+        "username": get_user.username,
+        "dob": get_user.dob.strftime("%d %B %Y"),
+        "join_date": get_user.join_date.strftime("%d %B %Y"),
+        "age": get_user.age,  
+    }
     return render_template("profile.html", details=user_details)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -111,7 +120,10 @@ def register():
         dob_entered = dob_entered
 
         current_date = datetime.datetime.now()
+<<<<<<< HEAD
         current_date = current_date.strftime("%d %B %Y")
+=======
+>>>>>>> 5d405766efd26d5c66afef191cd4e8a06cb6a239
 
         new_user = User(
             username=username_entered,

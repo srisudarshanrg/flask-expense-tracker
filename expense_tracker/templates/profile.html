@@ -20,41 +20,44 @@
             </div>
         {% endfor %}
     {% endwith %}
-    <header class="header">
-        <a href="{{ url_for('expense_tracker') }}" >
-            <button class="back-home">Back to Home</button>
-        </a>
+    <header class="header body-div">
+        <a href="{{ url_for('expense_tracker') }}" class="btn btn-outline-primary">Back</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-primary">Logout</a>
+        <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Create New Account</a>
+        <br><br>
         <div class="username-box">
-            <h1 class="username">Hello!!  {{details.username}}</h1>
+            <p class="username">Welcome {{details.username}}</p>
         </div>
     </header>
 
-    <div class="row" style="width: 100%;">
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card">
-                <h2>Date of Birth</h2>
-                <p id="dob">{{details.dob}}</p>
+    <div class="card-group body-div">
+        <div class="card">
+            <img style="height: 100px;width: 100px; align-self: center;" src="{{ url_for('static', filename='img/cake.png') }}" class="card-img-top" >
+            <div class="card-body">
+            <h5 class="card-title"><b>Date of Birth</b></h5>
+            <p class="card-text">{{details.dob}}</p>
             </div>
         </div>
-
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card">
-                <h2>Account Created</h2>
-                <p id="account-created">{{details.join_date}}</p>
+        <div class="card">
+            <img style="height: 100px;width: 100px; align-self: center;" src="{{ url_for('static', filename='img/user.png') }}" class="card-img-top">
+            <div class="card-body">
+            <h5 class="card-title"><b>Account Created</b></h5>
+            <p class="card-text">{{details.join_date}}</p>
             </div>
         </div>
-        
-        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-            <div class="card">
-                <h2>Age</h2>
-                <p id="age">{{details.age}}</p>
+        <div class="card">
+            <img style="height: 100px;width: 100px; align-self: center;" src="{{ url_for('static', filename='img/age.png') }}" class="card-img-top">
+            <div class="card-body">
+            <h5 class="card-title"><b>Age</b></h5>
+            <p class="card-text">{{details.age}}</p>
             </div>
-        </div>        
+        </div>
     </div>
 
-    <div class="button-container">
-        <a href="#" class="btn btn-lg btn-primary">Change Details</a>
-        <a href="#" class="btn btn-lg btn-primary">Reset Password</a>
+
+    <div class="button-container body-div">
+        <a href="#" class="transfer-button">Change Account</a>
+        <a href="#" class="transfer-button">Reset Password</a>
     </div>
 
     <script src="https://kit.fontawesome.com/2ce79bf423.js" crossorigin="anonymous"></script>
