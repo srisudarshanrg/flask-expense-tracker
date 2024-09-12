@@ -1,7 +1,7 @@
 from expense_tracker import app, db
-from expense_tracker.forms import DefineBudgetForm, LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
+from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
 from expense_tracker.models import Budget, User, Expenses
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from expense_tracker.functions import HashPassword, CheckPasswordHash
 import datetime
@@ -37,13 +37,12 @@ def expense_tracker():
             cost=cost_entered,
             year=year,
             expense_user=current_user.id,
-            year=year,
         )
 
         db.session.add(new_expense)
         db.session.commit()
 
-        flash(f"Expense \"{name_entered}\" for month {month_entered} created")
+        flash(f"Expense \"{name_entered}\" for month {month_entered} created", category="success")
 
         return redirect(url_for("expense_tracker"))
     
@@ -67,15 +66,15 @@ def expense_tracker():
                            month_search=month_dropdown,
                            )
 
-
-    return render_template("home.html",
-                           user_details=user_details,
-                           search=search_expense_form,
-                           expenses=expenses,
-                           current_month=current_month,
-                           add=add_expense_form,
-                           month_search=month_dropdown,
-                           )
+    if request.method == "GET":
+        return render_template("home.html",
+                            user_details=user_details,
+                            search=search_expense_form,
+                            expenses=expenses,
+                            current_month=current_month,
+                            add=add_expense_form,
+                            month_search=month_dropdown,
+                            )
 
 @app.route("/profile", methods=["GET", "POST"])
 @login_required
