@@ -1,6 +1,6 @@
 from expense_tracker import app, db
-from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
-from expense_tracker.models import User, Expenses
+from expense_tracker.forms import DefineBudgetForm, LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
+from expense_tracker.models import Budget, User, Expenses
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from expense_tracker.functions import HashPassword, CheckPasswordHash
@@ -66,8 +66,7 @@ def expense_tracker():
                            results=results,
                            month_search=month_dropdown,
                            )
-    
-    
+
 
     return render_template("home.html",
                            user_details=user_details,

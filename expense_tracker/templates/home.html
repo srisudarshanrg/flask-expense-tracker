@@ -129,7 +129,6 @@
             <br>
 
             {% if results %}
-<<<<<<< HEAD
                 {% for result in results %}
                     <div class="card border-light text-bg-dark">
                         <div class="card-header text-center">{{result.expense}}</div>
@@ -197,12 +196,6 @@
                 {% for expense in expenses %}
                     <div class="card border-light text-bg-dark">
                         <div class="card-header text-center">{{expense.expense}}</div>
-=======
-                <h3>Results <button class="btn btn-danger btn-close" style="color: #fff;"></button></h3>
-                {% for result in results %}                    
-                    <div class="card text-bg-dark">
-                        <div class="card-header" style="border-bottom: 1px solid #fff;">{{result.expense}}</div>
->>>>>>> 5d405766efd26d5c66afef191cd4e8a06cb6a239
                         <div class="card-body text-start">
                             <p><b>Description:</b> {{result.desc}}</p>
                             <p><b>Month:</b> {{result.month}}</p>
