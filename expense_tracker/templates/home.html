@@ -127,19 +127,36 @@
             <button class="btn btn-success" style="width: 100%;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"><i class="fa-solid fa-plus"></i> Add Expense</button>
             <br><br>
             <div class="expenses-div">
-                {% for expense in expenses %}
-                    <div class="card border-light text-bg-dark">
-                        <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
-                        <div class="card-body text-start">
-                            <p><b>Description:</b> {{expense.desc}}</p>
-                            <p><b>Month:</b> {{expense.month}}</p>
+                {% if month_expenses %}
+                    {% for expense in month_expenses %}
+                        <div class="card border-light text-bg-dark">
+                            <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
+                            <div class="card-body text-start">
+                                <p><b>Description:</b> {{expense.desc}}</p>
+                                <p><b>Month:</b> {{expense.month}}</p>
+                            </div>
+                            <div class="card-footer text-bg-success" style="height: 20%;">
+                                <p><b>Cost:</b> {{expense.cost}}</p>
+                            </div>
                         </div>
-                        <div class="card-footer text-bg-success" style="height: 20%;">
-                            <p><b>Cost:</b> {{expense.cost}}</p>
+                        <br>
+                    {% endfor %}                    
+                {% else %}
+                    {% for expense in expenses %}
+                        <div class="card border-light text-bg-dark">
+                            <div class="card-header text-center" style="border-bottom: 1px solid #fff;">{{expense.expense}}</div>
+                            <div class="card-body text-start">
+                                <p><b>Description:</b> {{expense.desc}}</p>
+                                <p><b>Month:</b> {{expense.month}}</p>
+                            </div>
+                            <div class="card-footer text-bg-success" style="height: 20%;">
+                                <p><b>Cost:</b> {{expense.cost}}</p>
+                            </div>
                         </div>
-                    </div>
-                    <br>
-                {% endfor %}
+                        <br>
+                    {% endfor %}
+                {% endif %}
+                
         </div>     
     </div>
 

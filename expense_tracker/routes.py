@@ -57,14 +57,28 @@ def expense_tracker():
         .filter(Expenses.expense.contains(f"{searched}")).all() #backslash is used to continue it to next line
 
         return render_template("home.html",
-                           user_details=user_details,
-                           search=search_expense_form,
-                           expenses=expenses,
-                           current_month=current_month,
-                           add=add_expense_form,
-                           results=results,
-                           month_search=month_dropdown,
+                                user_details=user_details,
+                                search=search_expense_form,
+                                expenses=expenses,
+                                current_month=current_month,
+                                add=add_expense_form,
+                                results=results,
+                                month_search=month_dropdown,
                            )
+
+    if month_dropdown.validate_on_submit():
+        month_entered = month_dropdown.search_month.data
+        month_expenses = Expenses.query.filter_by(expense_user=current_user.id, month=month_entered)
+
+        return render_template("home.html",
+                                user_details=user_details,
+                                search=search_expense_form,
+                                expenses=expenses,
+                                current_month=current_month,
+                                add=add_expense_form,
+                                month_search=month_dropdown,
+                                month_expenses=month_expenses
+                               )
 
     if request.method == "GET":
         return render_template("home.html",
