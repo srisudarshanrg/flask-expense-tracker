@@ -1,5 +1,7 @@
 from expense_tracker import bcrypt
 
+current_month_Set = ""
+
 def HashPassword(password: str) -> str:
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
     return hashed_password

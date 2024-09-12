@@ -1,6 +1,6 @@
 from expense_tracker import app, db
 from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
-from expense_tracker.models import Budget, User, Expenses
+from expense_tracker.models import Budget, CurrentMonth, User, Expenses
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from expense_tracker.functions import HashPassword, CheckPasswordHash
@@ -12,8 +12,10 @@ import datetime
 def expense_tracker():
     user_details = User.query.filter_by(id=current_user.id).first()
 
-    current_month = datetime.datetime.now()
-    current_month = current_month.strftime("%B")
+    current_month_unformat = datetime.datetime.now()
+    current_month = current_month_unformat.strftime("%B")
+    
+    print(current_month)
 
     search_expense_form = SearchExpenseForm()
     add_expense_form = AddExpenseForm()
@@ -81,6 +83,21 @@ def expense_tracker():
                                )
 
     if request.method == "GET":
+        current_month_exists = CurrentMonth.query.filter_by(month_user=current_user.id).first()
+        if current_month_exists:
+            current_month_exists.current_month = current_month
+            db.session.commit()
+        else:
+            new_current_month_row = CurrentMonth(
+                current_month=current_month,
+                month_user=current_user.id
+            )
+
+            db.session.add(new_current_month_row)
+            db.session.commit()
+
+        month_dropdown.search_month.data=current_month
+
         return render_template("home.html",
                             user_details=user_details,
                             search=search_expense_form,

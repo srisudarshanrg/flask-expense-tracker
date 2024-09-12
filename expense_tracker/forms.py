@@ -1,11 +1,8 @@
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, PasswordField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, ValidationError
-from expense_tracker.models import User
+from expense_tracker.models import CurrentMonth, User
 import datetime
-
-current_month = datetime.datetime.now()
-current_month = current_month.strftime("%B")
 
 # LoginForm is the form handling the login form
 class LoginForm(FlaskForm):
@@ -62,7 +59,7 @@ class SearchMonthForm(FlaskForm):
         ('October', 'October'),
         ('November', 'November'),
         ('December', 'December'),
-    ], default=current_month, validators=[DataRequired()])
+    ], validators=[DataRequired()])
     submit = SubmitField(label="Select")
 
 class SearchExpenseForm(FlaskForm):

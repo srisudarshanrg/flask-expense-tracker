@@ -13,7 +13,8 @@ class User(db.Model, UserMixin):
     dob = db.Column(db.String(), nullable=False)
     age = db.Column(db.Integer(), nullable=False)
     join_date = db.Column(db.String(), nullable=False)
-    expenses = db.relationship("Expenses", backref="user", lazy=True)
+    expenses = db.relationship("Expenses", backref="expenseuser", lazy=True)
+    months = db.relationship("CurrentMonth", backref="monthuser", lazy=True)
 
 class Expenses(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -36,3 +37,8 @@ class Budget(db.Model):
 
     def __repr__(self) -> str:
         return f"This budget is for user of user id {self.budget_user} for the month {self.budget_month}"
+
+class CurrentMonth(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    current_month = db.Column(db.String(), nullable=False)
+    month_user = db.Column(db.Integer(), db.ForeignKey("user.id"))
