@@ -14,6 +14,7 @@ def expense_tracker():
 
     current_month_unformat = datetime.datetime.now()
     current_month_start = current_month_unformat.strftime("%B")
+    year = datetime.datetime.now().year
     
     print(current_month_start)
 
@@ -32,7 +33,7 @@ def expense_tracker():
         desc_entered = add_expense_form.desc.data
         month_entered = add_expense_form.month.data
         cost_entered = int(add_expense_form.cost.data)
-        year = datetime.datetime.now().year
+        
 
         new_expense = Expenses(
             expense=name_entered,
@@ -105,8 +106,38 @@ def expense_tracker():
                                 budget_def=define_budget_form,
                                )
     
-    if define_budget_form.validate_on_submit:
-        pass
+    if define_budget_form.validate_on_submit():
+        current_month_row = CurrentMonth.query.filter_by(month_user=current_user.id).first()
+        month = current_month_row.current_month
+
+        # check to see if budget already exists
+        budget_exists = Budget.query.filter_by(budget_month=month, budget_year=year).all()
+        if len(budget_exists) > 0:
+            msg = f"Budget for {month} in {year} already exists. Do you want to overwrite it?"
+            return render_template("home.html",
+                                   budget_msg=msg,
+                                   )
+        else:
+            new_budget = Budget(
+                budget=int(define_budget_form.budget.data),
+                budget_month=month,
+                budget_year=year,
+                budget_user=current_user.id
+            )
+
+            db.session.add(new_budget)
+            db.session.commit()
+
+            return render_template("home.html",
+                            user_details=user_details,
+                            search=search_expense_form,
+                            expenses=expenses,
+                            current_month=current_month_start,
+                            add=add_expense_form,
+                            month_search=month_dropdown,
+                            budget_def=define_budget_form,
+                            budget=int(define_budget_form.budget.data),
+                            )
 
     if request.method == "GET":
         current_month_exists = CurrentMonth.query.filter_by(month_user=current_user.id).first()
