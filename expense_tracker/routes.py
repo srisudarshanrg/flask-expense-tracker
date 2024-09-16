@@ -1,5 +1,5 @@
 from expense_tracker import app, db
-from expense_tracker.forms import LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
+from expense_tracker.forms import DefineBudgetForm, LoginForm, RegisterForm, SearchExpenseForm, AddExpenseForm, SearchMonthForm
 from expense_tracker.models import Budget, CurrentMonth, User, Expenses
 from flask import render_template, flash, redirect, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
@@ -13,18 +13,20 @@ def expense_tracker():
     user_details = User.query.filter_by(id=current_user.id).first()
 
     current_month_unformat = datetime.datetime.now()
-    current_month = current_month_unformat.strftime("%B")
+    current_month_start = current_month_unformat.strftime("%B")
     
-    print(current_month)
+    print(current_month_start)
 
     search_expense_form = SearchExpenseForm()
     add_expense_form = AddExpenseForm()
 
+    define_budget_form = DefineBudgetForm()
+
     month_dropdown = SearchMonthForm()
 
-    expenses = Expenses.query.filter_by(expense_user=current_user.id, month=current_month).all()
+    expenses = Expenses.query.filter_by(expense_user=current_user.id, month=current_month_start).all()
 
-    # form validation for adding an expense
+    # logic if the add expense form is submitted
     if add_expense_form.validate_on_submit():
         name_entered = add_expense_form.expense.data
         desc_entered = add_expense_form.desc.data
@@ -44,11 +46,13 @@ def expense_tracker():
         db.session.add(new_expense)
         db.session.commit()
 
+        month_dropdown.search_month.data=current_month_start
+
         flash(f"Expense \"{name_entered}\" for month {month_entered} created", category="success")
 
         return redirect(url_for("expense_tracker"))
     
-    # form validation for searching an expense
+    # logic if the search expense form is submitted
     if search_expense_form.validate_on_submit():
         searched = str(search_expense_form.search_expense.data)
         searched = searched.lower()
@@ -58,20 +62,38 @@ def expense_tracker():
         )\
         .filter(Expenses.expense.contains(f"{searched}")).all() #backslash is used to continue it to next line
 
+        current_month_row = CurrentMonth.query.filter_by(month_user=current_user.id).first()
+        current_month_new = current_month_row.current_month
+
+        expenses = Expenses.query.filter_by(expense_user=current_user.id,
+                                            month=current_month_new,
+                                            )
+        
+        month_dropdown.search_month.data=current_month_start
+
         return render_template("home.html",
                                 user_details=user_details,
                                 search=search_expense_form,
                                 expenses=expenses,
-                                current_month=current_month,
+                                current_month=current_month_new,
                                 add=add_expense_form,
                                 results=results,
                                 month_search=month_dropdown,
+                                budget_def=define_budget_form,
                            )
 
+    # logic if the select month form is submitted
     if month_dropdown.validate_on_submit():
         month_entered = month_dropdown.search_month.data
         month_expenses = Expenses.query.filter_by(expense_user=current_user.id, month=month_entered)
 
+        former_current_month = CurrentMonth.query.filter_by(month_user=current_user.id).first()
+        former_current_month.current_month=month_entered
+        db.session.commit()
+
+        current_month_row = CurrentMonth.query.filter_by(month_user=current_user.id).first()
+        current_month = current_month_row.current_month
+
         return render_template("home.html",
                                 user_details=user_details,
                                 search=search_expense_form,
@@ -79,32 +101,37 @@ def expense_tracker():
                                 current_month=current_month,
                                 add=add_expense_form,
                                 month_search=month_dropdown,
-                                month_expenses=month_expenses
+                                month_expenses=month_expenses,
+                                budget_def=define_budget_form,
                                )
+    
+    if define_budget_form.validate_on_submit:
+        pass
 
     if request.method == "GET":
         current_month_exists = CurrentMonth.query.filter_by(month_user=current_user.id).first()
         if current_month_exists:
-            current_month_exists.current_month = current_month
+            current_month_exists.current_month = current_month_start
             db.session.commit()
         else:
             new_current_month_row = CurrentMonth(
-                current_month=current_month,
+                current_month=current_month_start,
                 month_user=current_user.id
             )
 
             db.session.add(new_current_month_row)
             db.session.commit()
 
-        month_dropdown.search_month.data=current_month
+        month_dropdown.search_month.data=current_month_start
 
         return render_template("home.html",
                             user_details=user_details,
                             search=search_expense_form,
                             expenses=expenses,
-                            current_month=current_month,
+                            current_month=current_month_start,
                             add=add_expense_form,
                             month_search=month_dropdown,
+                            budget_def=define_budget_form,
                             )
 
 @app.route("/profile", methods=["GET", "POST"])

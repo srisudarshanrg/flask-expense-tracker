@@ -83,10 +83,6 @@ class SearchMonthForm(FlaskForm):
     ], validators=[DataRequired()])
     submit = SubmitField(label="Select")
 
-# class SearchExpenseForm(FlaskForm):
-#     search_expense = StringField(label="Search", validators=[DataRequired()])
-#     submit = SubmitField(label="Search")
-
-# class DefineBudgetForm(FlaskForm):
-#     def_budget = IntegerField(label="Define Budget", validators=[DataRequired()])
-#     submit = SubmitField(label="Search")
+class DefineBudgetForm(FlaskForm):
+    budget = IntegerField(label="Define Budget", validators=[DataRequired()])
+    submit = SubmitField(label="Enter")
