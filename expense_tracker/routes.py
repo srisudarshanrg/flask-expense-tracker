@@ -48,7 +48,7 @@ def expense_tracker():
         db.session.commit()
 
         month_dropdown.search_month.data=current_month_start
-
+    
         flash(f"Expense \"{name_entered}\" for month {month_entered} created", category="success")
 
         return redirect(url_for("expense_tracker"))
