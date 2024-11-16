@@ -6,4 +6,181 @@
 
 {% block css %}
     <link rel="stylesheet" href="{{url_for('static', filename='css/tracker.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="category-container">
+        <h1>Expense Categories</h1>
+        <div class="category-row">
+            {% for category in category_expenses %}
+                <form method="post">
+                    <input type="hidden" name="categoryName" value="{{category.category}}">
+                    <button type="submit" class="category-btn">
+                        <div class="category-card">
+                            <h1>{{category.category}}</h1>
+                        </div>
+
+                        <footer style="background-color: rgb(60, 60, 60); color: #fff; border-radius: 5px; padding: 0.3% 0;">
+                            <h4>Expenditure: <i class="fa-solid fa-indian-rupee-sign"></i> {{category.amount}}</h4>
+                        </footer>
+                    </button>
+                </form>
+            {% endfor %}
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="graph-container">
+        <h1>Graphs and History</h1>
+        
+        <div class="graph-row">
+            <div class="graph-col date-graph">
+                <h3>Previous 10 Days</h3>
+                <form method="post" autocomplete="off">
+                    <div class="row">
+                        <div class="col-9">
+                            {% if recieved_date %}
+                                <input type="text" name="graphDate" id="graphDate" class="form-control" value="{{recieved_date}}" placeholder="Click to access calendar">
+                            {% else %}
+                                <input type="text" name="graphDate" id="graphDate" class="form-control" placeholder="Click to access calendar">
+                            {% endif %}
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Select</button>
+                        </div>
+                    </div>
+                </form>
+
+                {% if search_expenses %}
+                    {% if length_search == 0 %}
+                        <p>No results found</p>
+                    {% else %}
+                        <div class="search-results-container">
+                            <h3>{{length_search}} expenses on {{date}}</h3>
+                            <h5>Back <a href="{{url_for('tracker')}}"><i class="fa-regular fa-circle-xmark" style="color: #ff1000;"></i></a></h5>
+                            {% for expense in search_expenses %}
+                                <div class="search-expense" style="background-color: rgb(15, 15, 15);">    
+                                    <header>{{expense.time }} | {{expense.date}}</header>
+                                    <h3 style="margin-top: 1%;">{{expense.name}}</h3>
+                                    <hr>
+                                    <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}} | {{expense.category}}</h3>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <canvas id="date-graph-display"></canvas>
+            </div>
+
+            <div class="graph-col category-graph">
+                <h3>Expenditure by Category</h3>
+                <canvas id="category-graph-display"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
+
+    <script>
+        // datepicker
+        const dateInput = document.querySelector('input[name="graphDate"]');
+        const datepicker = new Datepicker(dateInput, {
+            weekNumbers: true,
+            format: "yyyy-mm-dd",
+            todayHighlight: false,
+            backgroundColor: "#fff",
+            class: "datepicker",
+        }); 
+
+        // date graph
+        var labels_date = {{ labels_date | safe }};
+        var data_date = {{ values_date | safe }};
+
+        var ctx_date = document.getElementById("date-graph-display").getContext("2d");
+        var dateGraph = new Chart(ctx_date, {
+            type: "line",
+            data: {
+                labels: labels_date,
+                datasets: [
+                    {
+                        label: "Expense by Date",
+                        data: data_date,
+                        borderColor: "#fff",
+                        backgroundColor: "#ff0000",
+                        color: "#fff",
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Date",
+                        },
+                        grid: {
+                            color: 'rgb(100, 100, 100)'  // Change the color of Y-axis gridlines here
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Total Expenditure",
+                        },
+                        grid: {
+                            color: 'rgb(100, 100, 100)'  // Change the color of Y-axis gridlines here
+                        },
+                    },
+                }
+            }
+        });
+
+        // category graph
+        var labels_category = {{ labels_category | safe }};
+        var data_category = {{ values_category | safe }};
+
+        var ctx_category = document.getElementById("category-graph-display").getContext("2d");
+        var categoryGraph = new Chart(ctx_category, {
+            type: "bar",
+            data: {
+                labels: labels_category,
+                datasets: [
+                    {
+                        label: "Expense by Category",
+                        data: data_category,
+                        backgroundColor: "#1c7002",
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: "Category",
+                        },
+                        grid: {
+                            color: 'rgb(100, 100, 100)'  // Change the color of Y-axis gridlines here
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "Total Expenditure",
+                        },
+                        grid: {
+                            color: 'rgb(100, 100, 100)'  // Change the color of Y-axis gridlines here
+                        }, 
+                    }
+                }
+            }
+        });
+    </script>
 {% endblock %}

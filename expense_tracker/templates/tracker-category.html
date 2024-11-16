@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{category}} | RaptorExpenses
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/tracker-category.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="expense-container">
+        <h1>{{category}} <a href="{{url_for('tracker')}}" class="back-link"><i class="fa-regular fa-circle-xmark"></i></a></h1>
+
+        <div class="expense-row">
+            {% for expense in expenses %}   
+                <div class="expense">
+                    <header>{{expense.time}} / {{expense.date}}</header>
+                    <h3 style="margin-top: 1%;">{{expense.name}}</h3>
+                    <h2><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}}</h2>
+                    <hr>
+                    <h3 style="margin-bottom: 3%;">{{expense.category}}</h3>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

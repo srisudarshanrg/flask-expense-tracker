@@ -1,0 +1,73 @@
+#navbar-search-form {
+    display: none;
+}
+
+#add-expense-nav-profile {
+    display: none;
+}
+
+.expense-container {
+    text-align: center;
+    margin-top: 1%;
+}
+
+.expense-container h1 {
+    margin-left: 1%;
+    margin-right: 1%;
+    margin-bottom: 1%;
+    border-radius: 5px;
+    background-color: rgb(30, 30, 30);
+    padding: 0.2% 0;
+}
+
+.back-link {
+    color: #ff1000;
+    transition: 0.1s;
+    margin-left: 2%;
+}
+
+.back-link:hover {
+    color: #ff4b3e;
+    transition: 0.1s;
+}
+
+.expense-row {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 8px;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.expense {
+    background-color: rgb(30, 30, 30);
+    border-radius: 5px;
+    border: 2px solid rgb(0, 107, 0);
+}
+
+.expense:hover {
+    background-color: rgb(33, 33, 33);
+    cursor: pointer;
+}
+
+.expense header {
+    background-color: rgb(0, 107, 0);
+}
+
+@media (min-width: 769px) {
+    .expense-row {
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .expense-row {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .expense-row {
+        grid-template-columns: auto;
+    }
+}

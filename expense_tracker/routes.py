@@ -166,14 +166,100 @@ def expenses_table():
             if length == 0:
                 flash(message="No results found", category="info")
 
-            return render_template("expenses.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors, length=length, results=results)
+            return render_template("expenses-table.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors, length=length, results=results)
 
     return render_template("expenses-table.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors)
 
-@app.route("/tracker")
+@app.route("/tracker", methods=["GET", "POST"])
 @login_required
 def tracker():
-    return render_template("tracker.html")
+    categories = db.session.query(Expense.category).filter_by(user=current_user.id).distinct().all()
+    category_expenses_list = []
+    labels_category = []
+    values_category = []
+    labels_date = []
+    values_date = []
+
+    for category in categories:
+        total_amount = 0
+        category_rows = Expense.query.filter_by(category=category[0], user=current_user.id).all()
+        for row in category_rows:
+            total_amount += row.amount
+        category_dict = {
+            "category": category[0],
+            "amount": total_amount,
+        }
+        category_expenses_list.append(category_dict)
+
+        labels_category.append(category_dict["category"])
+        values_category.append(category_dict["amount"])
+
+    n = 10
+
+    while n >= 0:
+        day_before = datetime.date.today() - datetime.timedelta(days=n)
+        day_before = day_before.strftime("%d %b %Y")
+        rows = Expense.query.filter_by(date=day_before, user=current_user.id).all()
+        total = 0
+        for row in rows:
+            total+=row.amount
+
+        values_date.append(total)
+
+        labels_date.append(day_before)
+        
+        n-=1
+
+    if request.method == "POST":
+        if "categoryName" in request.form:
+            category = request.form.get("categoryName")
+            expenses = Expense.query.filter_by(category=category, user=current_user.id).all()
+
+            expenses_list = []
+
+            if expenses:
+                for expense in expenses:
+                    expense_dict = {
+                        "id": expense.id,
+                        "name": expense.name,
+                        "date": expense.date,
+                        "time": datetime.datetime.strftime(expense.time, "%H:%M"),
+                        "amount": expense.amount,
+                        "category": expense.category,
+                    }       
+
+                    expenses_list.append(expense_dict)
+
+                return render_template("tracker-category.html", category=category, expenses=expenses_list)
+        
+        elif "graphDate" in request.form:
+            recieved_date = request.form.get("graphDate")
+            date = datetime.datetime.strptime(recieved_date, "%Y-%m-%d")
+            converted_date = date.strftime("%d %b %Y")
+            search_expenses = Expense.query.filter_by(user=current_user.id, date=converted_date).all()          
+
+            search_expenses_list = []
+
+            for expense in search_expenses:
+                search_expense_dict = {
+                    "id": expense.id,
+                    "name": expense.name,
+                    "category": expense.category,
+                    "time": datetime.datetime.strftime(expense.time, "%H:%M"),
+                    "date": expense.date,
+                    "amount": expense.amount,
+                    "user": expense.user,
+                }
+
+                search_expenses_list.append(search_expense_dict)
+            
+            length = len(search_expenses_list)
+            if length == 0:
+                flash(message=f"No expenses found on {converted_date}", category="info")
+
+            return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date, search_expenses=search_expenses_list, length_search=length, date=converted_date, recieved_date=recieved_date)
+
+    return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date)
 
 @app.route("/budget")
 @login_required

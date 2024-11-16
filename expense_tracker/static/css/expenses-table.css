@@ -25,13 +25,20 @@ table {
     margin-top: 1%;
 }
 
-.canvas-div {
+.canvas-div-whole {
     text-align: center;
     background-color: rgb(15, 15, 15);
     border-radius: 10px;
     padding: 2% 0;
+    text-align: center;    
 }
 
-.canvas-div #categoryShareChart {
-    width: 100%;
+.canvas-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.canvas-div canvas {
+    width: 75%;
 }
