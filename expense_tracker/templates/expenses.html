@@ -1,2 +1,51 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    Expenses | Expense Tracker
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/expenses.css')}}">
+{% endblock %}
+
+{% block content %}
+    <!-- create expense offcanvas -->
+    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="addExpenseOffcanvas" aria-labelledby="addExpenseOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">ADD EXPENSE</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" style="background-color: #fff;"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form method="post">
+                <input type="hidden" name="addExpense">
+                <input type="text" name="expenseName" placeholder="Expense Name" class="form-control">
+                <input type="text" name="expenseCategory" placeholder="Expense Category" class="form-control">
+                <input type="number" name="expenseAmount" placeholder="Expense Amount" class="form-control">
+                <br>
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-plus"></i> Add Expense</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 recent-expenses">
+            <h2>Recent Expenses</h2>
+            <div class="btn-group gap-1 expense-navigate-grp">
+                <button class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
+                <button class="btn btn-success"><i class="fa-solid fa-table"></i> View as Table</button>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <h2>Analysis</h2>
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <td>Category</td>
+                    <td>Total Expenditure</td>
+                </thead>
+                {% for item in iterable %}
+                    
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}

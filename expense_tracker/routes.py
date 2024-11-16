@@ -1,7 +1,8 @@
+import datetime
 from flask import flash, redirect, render_template, request, url_for
-from flask_login import login_required, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from . import app
-from .functions import AuthenticateUser, CreateUser, HashPassword
+from .functions import AuthenticateUser, CreateExpense, CreateUser, HashPassword
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 
 # expenses is the handler for the expenses page
@@ -9,6 +10,21 @@ from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 @app.route("/expenses")
 @login_required
 def expenses():
+    if request.method == "POST":
+        if "addExpense" in request.form:
+            name = request.form.get("expenseName")
+            category = request.form.get("expenseCategory")
+            amount = int(request.form.get("requestAmount"))
+            time = datetime.datetime.now()
+            date = datetime.datetime.now().strftime("%d %b %Y")
+            user = current_user.id
+
+            msg, category = CreateExpense(name, category, time, date, amount, user)
+
+            flash(message=msg, category=category)
+
+            return redirect(url_for('expenses'))
+
     return render_template("expenses.html")
 
 @app.route("/tracker")

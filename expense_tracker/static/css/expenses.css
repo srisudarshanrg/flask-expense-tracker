@@ -1,0 +1,9 @@
+.recent-expenses {
+    font-family: "Work Sans", sans-serif;
+    padding-left: 2%;
+    padding-top: 1%;
+}
+
+#addExpenseOffcanvas input, button {
+    margin-top: 2%;
+}
