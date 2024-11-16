@@ -31,11 +31,84 @@
 
         <div class="all-budget-container">
             {% for budget in budgets %}
-                <div class="budget-container">
-                    <h3>{{budget.category}}</h3>
-                    <h2>{{budget.amount}}</h2>
+                <div class="budget-container" style="border: 1px solid {{budget.color}};">
+                    <div class="header" style="background-color: {{budget.color}};">
+                        <h4>{{budget.category}}</h4>
+                    </div>
+
+                    <h3>Expenditure: <i class="fa-solid fa-indian-rupee-sign"></i> {{budget.expense_amount}}</h3>
+                    <h3>Budget: <i class="fa-solid fa-indian-rupee-sign"></i> {{budget.budget_amount}}</h3>
+
+                    <div class="footer" style="background-color: {{budget.color}};">
+                        <h2>Difference: <i class="fa-solid fa-indian-rupee-sign"></i>{{budget.difference}}</h2>
+                    </div>
                 </div>
             {% endfor %}
         </div>
+
+        <hr style="border: 2px solid #fff;">
+
+        <div class="budget-graph-container">
+            <h3>Budget Against Expense</h3>
+            <canvas id="budget-against-expense"></canvas>    
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('budget-against-expense').getContext('2d');
+
+        const data = {
+            labels: {{ labels | safe }},
+            datasets: [
+                {
+                    label: 'Budget',
+                    data: {{budget_values | safe}},
+                    borderColor: '#ff1000',
+                    borderWidth: 2,
+                    // fill: true,
+                },
+                {
+                    label: 'Expenses',
+                    data: {{expense_values | safe}},
+                    borderColor: '#008000',
+                    borderWidth: 2,
+                    // fill: true,
+                },
+            ],
+        };
+
+        const options = {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    enabled: true,
+                },
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+                    grid: {
+                        color: "rgb(50, 50, 50)",
+                    },
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: "rgb(50, 50, 50)",
+                    },
+                },
+            },
+        };
+
+        const budgetAgainstExpenseChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options,
+        });
+    </script>
 {% endblock %}

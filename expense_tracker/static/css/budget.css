@@ -14,3 +14,45 @@ body {
     text-align: center;
     padding-top: 1%;
 }
+
+.all-budget-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 12px;
+    padding: 2% 1% 0 1%;
+}
+
+.budget-container {
+    background-color: rgb(30, 30, 30);
+}
+
+.budget-container:hover {
+    background-color: rgb(37, 37, 37);
+    cursor: pointer;
+}
+
+.budget-graph-container {
+    width: 60%;
+    margin: 0 auto 1% auto;
+    background-color: rgb(25, 25, 25);
+    padding: 1%;
+    border-radius: 5px;
+}
+
+@media (min-width: 769px) {
+    .all-budget-container {
+        grid-template-columns: auto auto auto auto;
+    }
+}
+
+@media (min-width: 576px) and (max-width: 768px) {
+    .all-budget-container {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .all-budget-container {
+        grid-template-columns: auto;
+    }
+}

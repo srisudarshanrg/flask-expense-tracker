@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Profile | RaptorExpenses
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/profile.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="user-details">
+        <h1>Your Profile</h1>
+        <div class="user-row">
+            <div class="detail">
+                <div class="header">Username</div>
+                <h3>{{user.username}}</h3>
+            </div>
+
+            <div class="detail">
+                <div class="header">Email</div>
+                <h3>{{user.email}}</h3>
+            </div>
+
+            <div class="detail">
+                <div class="header">Join Date</div>
+                <h3>{{user.join_date}}</h3>
+            </div>
+        </div>
+    </div>
+{% endblock %}

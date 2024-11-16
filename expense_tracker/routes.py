@@ -3,7 +3,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from expense_tracker.models import Budget, CategoryColors, Expense
 from . import app, db
-from .functions import AuthenticateUser, CreateBudget, CreateExpense, CreateUser, GetBudgets, HashPassword, SearchExpense
+from .functions import AuthenticateUser, CreateBudget, CreateExpense, CreateUser, GetBudgets, GetProfileDetails, HashPassword, SearchExpense
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 
 # expenses is the handler for the expenses page
@@ -264,9 +264,7 @@ def tracker():
 @app.route("/budget", methods=["GET", "POST"])
 @login_required
 def budget():
-    budgets = GetBudgets(current_user.id)
-
-    if request.method == "post":
+    if request.method == "POST":
         if "defineBudget" in request.form:
             category = request.form.get("budgetCategory")
             amount = request.form.get("budgetAmount")
@@ -277,12 +275,15 @@ def budget():
             flash(message=msg, category="info")
 
             return redirect(url_for('budget'))
+        
+    budgets, labels, expense_values, budget_values = GetBudgets(current_user.id)
 
-    return render_template("budget.html", budgets=budgets)
+    return render_template("budget.html", budgets=budgets, labels=labels, expense_values=expense_values, budget_values=budget_values)
 
 @app.route("/profile")
 def profile():
-    return render_template("profile.html")
+    user_details = GetProfileDetails(current_user.id)
+    return render_template("profile.html", user=user_details)
 
 # login is the handler for the login page
 @app.route("/login", methods=["GET", "POST"])

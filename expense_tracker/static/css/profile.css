@@ -1,0 +1,43 @@
+body {
+    font-family: "Work Sans", sans-serif;
+}
+
+.user-details {
+    text-align: center;
+    margin-top: 1%;
+}
+
+.user-row {
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 6px;
+    padding: 0 1% 0 1%;
+}
+
+.detail {
+    background-color: rgb(30, 30, 30);
+    border-radius: 5px;
+    border-radius: 5px;
+}
+
+.detail:hover {
+    cursor: pointer;
+    background-color: rgb(34, 34, 34);
+}
+
+.detail .header {
+    background-color: #008000;
+}
+
+@media (min-width: 576px) {
+    .user-row {
+        grid-template-columns: auto auto auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .user-row {
+        grid-template-columns: auto;
+    }
+}
