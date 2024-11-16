@@ -1,0 +1,16 @@
+body {
+    background-color: rgb(30, 30, 30);
+    color: #fff;
+}
+
+form {
+    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
+.input-group, button, a {
+    margin-top: 1%;
+}

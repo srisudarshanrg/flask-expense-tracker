@@ -1,0 +1,35 @@
+{% extends 'auth_layout.html' %}
+
+{% block title %}
+    Expense Tracker | Register
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+        <h1>Register</h1>
+
+        <input type="hidden" name="registerForm">
+        <div class="input-group">
+            <div class="input-group-text"><i class="fa-solid fa-user"></i></div>
+            <input name="username" type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username">            
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-text"><i class="fa-solid fa-at"></i></div>
+            <input name="email" type="text" class="form-control" id="autoSizingInputGroup" placeholder="Email">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-text"><i class="fa-solid fa-lock"></i></div>
+            <input name="pwd" type="password" class="form-control" id="autoSizingInputGroup" placeholder="Password">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-text"><i class="fa-solid fa-lock"></i></div>
+            <input name="pwd-confirm" type="password" class="form-control" id="autoSizingInputGroup" placeholder="Confirm Password">
+        </div>
+
+        <a href="{{url_for('login')}}" class="btn btn-dark btn-sm" style="width: 100%; border: 2px solid rgb(50, 50, 50);">Or Login</a>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Enter</button>
+    </form>
+{% endblock %}
