@@ -67,10 +67,12 @@ def expenses_table():
     expense_list = []
     expenses = Expense.query.filter_by(user=current_user.id).all()
     for expense in expenses:
+        color_row = CategoryColors.query.filter_by(category=expense.category, user=current_user.id).first()
         expense_dict = {
             "id": expense.id,
             "name": expense.name,
-            "category": expense.category,
+            "category": expense.category,            
+            "color": color_row.color,
             "amount": expense.amount,
             "time": expense.time.strftime("%H:%M"),
             "date": expense.date,

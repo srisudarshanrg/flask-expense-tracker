@@ -32,11 +32,10 @@
         <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 recent-expenses">
             <h2>Recent Expenses</h2>
 
-            <div class="btn-group gap-1">
+            <div class="btn-group gap-1" style="margin-bottom: 1%;">
                 <button class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
                 <a href="{{url_for('expenses_table')}}" class="btn btn-success"><i class="fa-solid fa-table"></i> View as Table</a>
-            </div>
-            
+            </div>            
             
             {% for expense in expenses %}
                 <div class="expense-container">
