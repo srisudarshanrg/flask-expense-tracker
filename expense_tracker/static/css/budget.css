@@ -5,3 +5,12 @@
 #add-expense-nav-profile {
     display: none;
 }
+
+body {
+    font-family: "Work Sans", sans-serif;
+}
+
+.budget-category-section {
+    text-align: center;
+    padding-top: 1%;
+}

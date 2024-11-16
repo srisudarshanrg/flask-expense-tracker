@@ -1,9 +1,9 @@
 import datetime
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from expense_tracker.models import CategoryColors, Expense
+from expense_tracker.models import Budget, CategoryColors, Expense
 from . import app, db
-from .functions import AuthenticateUser, CreateExpense, CreateUser, HashPassword, SearchExpense
+from .functions import AuthenticateUser, CreateExpense, CreateUser, GetBudgets, HashPassword, SearchExpense
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 
 # expenses is the handler for the expenses page
@@ -264,7 +264,9 @@ def tracker():
 @app.route("/budget")
 @login_required
 def budget():
-    return render_template("budget.html")
+    budgets = GetBudgets(current_user.id)
+
+    return render_template("budget.html", budgets=budgets)
 
 @app.route("/profile")
 def profile():

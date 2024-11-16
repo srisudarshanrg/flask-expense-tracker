@@ -7,8 +7,12 @@
 }
 
 body {
-    font-family: "Open Sans", sans-serif;
+    font-family: "Work Sans", sans-serif;
     padding-bottom: 1%;
+}
+
+.navbar-collapse {
+    justify-content: center;
 }
 
 .category-container {

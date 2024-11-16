@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Budget | RaptorExpenses
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{url_for('static', filename='css/budget.css')}}">
+{% endblock %}
+
+{% block content %}
+    <div class="budget-category-section">
+        <h2>Budgets by Category</h2>
+
+        <div class="all-budget-container">
+            {% for budget in budgets %}
+                <div class="budget-container">
+                    {{budget.category}}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

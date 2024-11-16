@@ -1,7 +1,7 @@
 # HashPassword hashes the password and returns it
 import datetime
 from flask_login import login_user
-from .models import CategoryColors, Expense, User
+from .models import Budget, CategoryColors, Expense, User
 from . import db, bcrypt
 
 def HashPassword(pwd: str) -> str:
@@ -95,3 +95,24 @@ def SearchExpense(query: str, user: int):
     length = len(result_list)
     
     return length, result_list
+
+# GetBudgets gets all the budgets regarding category from the database
+def GetBudgets(user: int) -> list:
+    try:
+        budget_row = Budget.query.filter_by(user=user).all()
+        budget_list = []
+
+        for budget in budget_row:
+            budget_dict = {
+                "id": budget.id,
+                "category": budget.category,
+                "amount": budget.amount,
+                "user": budget.user,
+            }
+
+            budget_list.append(budget_dict)
+
+        return budget_list
+    
+    except Exception as exception:
+        return f"Error getting budgets: {exception}"
