@@ -1,7 +1,7 @@
 # HashPassword hashes the password and returns it
 import datetime
 from flask_login import login_user
-from .models import Expense, User
+from .models import CategoryColors, Expense, User
 from . import db, bcrypt
 
 def HashPassword(pwd: str) -> str:
@@ -44,7 +44,7 @@ def AuthenticateUser(username: str, pwd: str) -> object:
         return False
     
 # CreateExpense creates a new expense in the database
-def CreateExpense(name: str, category: str, time: datetime.datetime, date: str, amount: int, user: int) -> str:
+def CreateExpense(name: str, category: str, color: str, time: datetime.datetime, date: str, amount: int, user: int) -> str:
     try:
         new_expense = Expense(
             name=name,
@@ -57,6 +57,19 @@ def CreateExpense(name: str, category: str, time: datetime.datetime, date: str, 
 
         db.session.add(new_expense)
         db.session.commit()
+
+        exists = CategoryColors.query.filter_by(category=category, user=user).first()
+        if exists != None:
+            pass
+        else:
+            new_category_color = CategoryColors(
+                category=category,
+                color=color,
+                user=user,
+            )
+
+            db.session.add(new_category_color)
+            db.session.commit()
 
         return f"Expense \"{name}\" created successfully!", "success"
     except Exception as exception:

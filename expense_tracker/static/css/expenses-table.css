@@ -1,0 +1,11 @@
+.expenses-row {
+    padding: 1%;
+}
+
+table {
+    margin-top: 1.5%;
+}
+
+#addExpenseOffcanvas input {
+    margin-top: 1%;
+}

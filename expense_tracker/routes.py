@@ -1,7 +1,7 @@
 import datetime
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
-from expense_tracker.models import Expense
+from expense_tracker.models import CategoryColors, Expense
 from . import app, db
 from .functions import AuthenticateUser, CreateExpense, CreateUser, HashPassword
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
@@ -10,22 +10,60 @@ from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 @app.route("/", methods=["GET", "POST"])
 @app.route("/expenses", methods=["GET", "POST"])
 @login_required
-def expenses():
+def expenses():    
+    expense_list = []
+    expenses = Expense.query.filter_by(user=current_user.id).all()
+    for expense in expenses:
+        color_row = CategoryColors.query.filter_by(category=expense.category, user=current_user.id).first()
+        expense_dict = {
+            "id": expense.id,
+            "name": expense.name,
+            "category": expense.category,
+            "color": color_row.color,
+            "amount": expense.amount,
+            "time": expense.time.strftime("%H:%M"),
+            "date": expense.date,
+            "user": expense.user,
+        }
+
+        expense_list.append(expense_dict)
+
+    expense_list = expense_list[::-1]
+
+    category_list = []
+    categories = db.session.query(Expense.category).filter_by(user=current_user.id).distinct().all()
+    
+    for category in categories:
+        category_row = Expense.query.filter_by(category=category[0], user=current_user.id).all()
+        total_amount = 0
+        for each in category_row:
+            total_amount += each.amount
+        category_dict = {
+            "category": category[0],
+            "amount": total_amount,
+        }
+        category_list.append(category_dict)
+    
     if request.method == "POST":
         if "addExpense" in request.form:
             name = request.form.get("expenseName")
             category = request.form.get("expenseCategory").upper()
             amount = int(request.form.get("expenseAmount"))
+            color = request.form.get("expenseColor")
             time = datetime.datetime.now()
             date = datetime.datetime.now().strftime("%d %b %Y")
             user = current_user.id
 
-            msg, category = CreateExpense(name, category, time, date, amount, user)
+            msg, category = CreateExpense(name, category, color, time, date, amount, user)
 
             flash(message=msg, category=category)
 
             return redirect(url_for('expenses'))
-    
+
+    return render_template("expenses.html", expenses=expense_list, categories=category_list)
+
+@app.route("/expenses-table")
+def expenses_table():
     expense_list = []
     expenses = Expense.query.filter_by(user=current_user.id).all()
     for expense in expenses:
@@ -56,8 +94,23 @@ def expenses():
             "amount": total_amount,
         }
         category_list.append(category_dict)
+    
+    if request.method == "POST":
+        if "addExpense" in request.form:
+            name = request.form.get("expenseName")
+            category = request.form.get("expenseCategory").upper()
+            amount = int(request.form.get("expenseAmount"))
+            time = datetime.datetime.now()
+            date = datetime.datetime.now().strftime("%d %b %Y")
+            user = current_user.id
 
-    return render_template("expenses.html", expenses=expense_list, categories=category_list)
+            msg, category = CreateExpense(name, category, time, date, amount, user)
+
+            flash(message=msg, category=category)
+
+            return redirect(url_for('expenses'))
+
+    return render_template("expenses-table.html", expenses=expense_list, categories=category_list)
 
 @app.route("/tracker")
 @login_required

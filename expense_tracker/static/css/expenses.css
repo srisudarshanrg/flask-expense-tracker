@@ -5,8 +5,8 @@
 
 .expense-container {
     margin-top: 1%;
-    background-color: rgb(25, 25, 25);
-    padding: 1% 1% 1% 2%;
+    background-color: rgb(27, 27, 27);
+    padding: 1% 1% 1.5% 2%;
     border-radius: 10px;
     transition: 0.3s;
 }
