@@ -116,3 +116,22 @@ def GetBudgets(user: int) -> list:
     
     except Exception as exception:
         return f"Error getting budgets: {exception}"
+    
+# CreateBudget creates a budget in the database
+def CreateBudget(category: str, amount: int, user: int):
+    exists = Budget.query.filter_by(category=category, user=user).first()
+    if exists != None:
+        exists.amount = amount
+        db.session.commit()
+        return "Budget for category already exists, so only amount has been updated for the existing category"
+    else:
+        new_budget = Budget(
+            category=category,
+            amount=amount,
+            user=user
+        )
+
+        db.session.add(new_budget)
+        db.session.commit()
+
+        return f"Budget has been defined for {category}"

@@ -9,13 +9,31 @@
 {% endblock %}
 
 {% block content %}
+    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="defineBudgetOffcanvas" aria-labelledby="defineBudgetOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">DEFINE BUDGET</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" style="background-color: #fff;"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form method="post">
+                <input type="hidden" name="defineBudget">
+                <input type="text" name="budgetCategory" id="budgetCategory" placeholder="Budget Category" class="form-control" style="margin-top: 1.5%;">
+                <input type="number" name="budgetAmount" id="budgetAmount" placeholder="Budget Amount" class="form-control" style="margin-top: 1.5%;">
+                <br>
+                <button type="submit" class="btn btn-primary"><i class="fa-regular fa-pen-to-square"></i> Define Budget</button>
+            </form>
+        </div>
+    </div>
+
     <div class="budget-category-section">
         <h2>Budgets by Category</h2>
+        <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#defineBudgetOffcanvas"><i class="fa-regular fa-pen-to-square"></i> Define Budget</button>
 
         <div class="all-budget-container">
             {% for budget in budgets %}
                 <div class="budget-container">
-                    {{budget.category}}
+                    <h3>{{budget.category}}</h3>
+                    <h2>{{budget.amount}}</h2>
                 </div>
             {% endfor %}
         </div>

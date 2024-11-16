@@ -3,7 +3,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from expense_tracker.models import Budget, CategoryColors, Expense
 from . import app, db
-from .functions import AuthenticateUser, CreateExpense, CreateUser, GetBudgets, HashPassword, SearchExpense
+from .functions import AuthenticateUser, CreateBudget, CreateExpense, CreateUser, GetBudgets, HashPassword, SearchExpense
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 
 # expenses is the handler for the expenses page
@@ -261,10 +261,22 @@ def tracker():
 
     return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date)
 
-@app.route("/budget")
+@app.route("/budget", methods=["GET", "POST"])
 @login_required
 def budget():
     budgets = GetBudgets(current_user.id)
+
+    if request.method == "post":
+        if "defineBudget" in request.form:
+            category = request.form.get("budgetCategory")
+            amount = request.form.get("budgetAmount")
+            user = current_user.id
+
+            msg = CreateBudget(category, amount, user)
+
+            flash(message=msg, category="info")
+
+            return redirect(url_for('budget'))
 
     return render_template("budget.html", budgets=budgets)
 
