@@ -9,6 +9,26 @@
 {% endblock %}
 
 {% block content %}
+    {% if results %}
+        <!-- search expenses offcanvas -->
+        <div class="offcanvas offcanvas-start show text-bg-dark search-results" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasLabel">SEARCH RESULTS</h5>
+                <a href="{{url_for('expenses_table')}}" class="btn-close" style="background-color: #fff;"></a>
+            </div>
+            <div class="offcanvas-body">
+                <h5>"{{length}}" Results Found</h5>
+                {% for result in results %}                            
+                    <div class="expense-box" style="margin-top: 3%;">
+                        <small>{{result.time}} | {{result.date}}</small>
+                        <h5 style="margin-bottom: 0; margin-top: 0.5%;">{{result.name}}</h5>
+                        <h4 style="margin-bottom: 0; margin-top: 1%;"><i class="fa-solid fa-indian-rupee-sign"></i> {{result.amount}} | {{result.category}}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     <!-- create expense offcanvas -->
     <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="addExpenseOffcanvas" aria-labelledby="addExpenseOffcanvasLabel">
         <div class="offcanvas-header">
@@ -29,7 +49,7 @@
     </div>
 
     <div class="row expenses-row">
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 expense-table">
+        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 expense-table">
             <h2>Recent Expenses</h2>
             <div class="btn-group gap-1">
                 <button class="btn btn-success"data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
@@ -61,7 +81,7 @@
                 {% endfor %}
             </table>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <h2>Analysis</h2>
             <table class="table table-dark table-striped table-hover">
                 <thead>
@@ -75,6 +95,39 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            <div class="canvas-div">
+                <h5>Expenses Share</h5>
+                <canvas id="categoryShareChart"></canvas>
+            </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // expense share chart js
+        var labels = {{ labels | safe }};
+        var values = {{ values | safe }};
+        var colors = {{ colors | safe }};
+
+        var ctx = document.getElementById("categoryShareChart").getContext("2d");
+        var analysisChart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Expenditure",
+                        data: values,
+                        backgroundColor: colors,
+                        borderColor: "rgb(255, 255, 255)",
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+            }
+        });
+    </script>
 {% endblock %}

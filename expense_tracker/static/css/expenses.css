@@ -25,3 +25,29 @@
 #addExpenseOffcanvas input, #addExpenseOffcanvas button {
     margin-top: 2%;
 }
+
+.expense-box {
+    margin-top: 1%;
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.8);
+    padding: 1%;
+    padding-left: 2%;
+    border-radius: 10px;
+    transition: 0.3s;
+    font-family: "Montserrat", sans-serif;
+}
+
+.expense-box:hover {
+    transform: scale(1.01);
+    transition: 0.3s;
+}
+
+.canvas-div {
+    text-align: center;
+    background-color: rgb(15, 15, 15);
+    border-radius: 10px;
+    padding: 2% 0;
+}
+
+.canvas-div #categoryShareChart {
+    width: 100%;
+}

@@ -3,7 +3,7 @@ from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from expense_tracker.models import CategoryColors, Expense
 from . import app, db
-from .functions import AuthenticateUser, CreateExpense, CreateUser, HashPassword
+from .functions import AuthenticateUser, CreateExpense, CreateUser, HashPassword, SearchExpense
 from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 
 # expenses is the handler for the expenses page
@@ -12,6 +12,10 @@ from .validations import ValidateEmail, ValidatePassword, ValidateUsername
 @login_required
 def expenses():    
     expense_list = []
+    labels = []
+    values = []
+    colors = []
+
     expenses = Expense.query.filter_by(user=current_user.id).all()
     for expense in expenses:
         color_row = CategoryColors.query.filter_by(category=expense.category, user=current_user.id).first()
@@ -42,6 +46,10 @@ def expenses():
             "category": category[0],
             "amount": total_amount,
         }
+        labels.append(category[0])
+        values.append(total_amount)
+        color_row = CategoryColors.query.filter_by(category=category[0], user=current_user.id).first()
+        colors.append(color_row.color)
         category_list.append(category_dict)
     
     if request.method == "POST":
@@ -59,12 +67,35 @@ def expenses():
             flash(message=msg, category=category)
 
             return redirect(url_for('expenses'))
+        elif "deleteExpenseID" in request.form:
+            id = request.form.get("deleteExpenseID")
+            to_delete = Expense.query.filter_by(id=id).first()
 
-    return render_template("expenses.html", expenses=expense_list, categories=category_list)
+            db.session.delete(to_delete)
+            db.session.commit()
 
-@app.route("/expenses-table")
+            flash(message="Expense has been deleted.", category="info")
+
+            return redirect(url_for('expenses'))
+        
+        elif "searchExpense" in request.form:
+            query = str(request.form.get("search-expense"))
+            length, results = SearchExpense(query, current_user.id)
+
+            if length == 0:
+                flash(message="No results found", category="info")
+
+            return render_template("expenses.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors, length=length, results=results)
+
+    return render_template("expenses.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors)
+
+@app.route("/expenses-table", methods=["GET", "POST"])
 def expenses_table():
     expense_list = []
+    labels = []
+    values = []
+    colors = []
+
     expenses = Expense.query.filter_by(user=current_user.id).all()
     for expense in expenses:
         color_row = CategoryColors.query.filter_by(category=expense.category, user=current_user.id).first()
@@ -95,24 +126,49 @@ def expenses_table():
             "category": category[0],
             "amount": total_amount,
         }
+        color_row = CategoryColors.query.filter_by(category=category[0], user=current_user.id).first()
+        colors.append(color_row.color)
+        labels.append(category[0])
+        values.append(total_amount)        
         category_list.append(category_dict)
     
     if request.method == "POST":
         if "addExpense" in request.form:
             name = request.form.get("expenseName")
             category = request.form.get("expenseCategory").upper()
+            color = request.form.get("expenseColor")
             amount = int(request.form.get("expenseAmount"))
             time = datetime.datetime.now()
             date = datetime.datetime.now().strftime("%d %b %Y")
             user = current_user.id
 
-            msg, category = CreateExpense(name, category, time, date, amount, user)
+            msg, category = CreateExpense(name, category, color, time, date, amount, user)
 
             flash(message=msg, category=category)
 
-            return redirect(url_for('expenses'))
+            return redirect(url_for('expenses_table'))
+        
+        elif "deleteExpenseID" in request.form:
+            id = request.form.get("deleteExpenseID")
+            to_delete = Expense.query.filter_by(id=id).first()
+            
+            db.session.delete(to_delete)
+            db.session.commit()
 
-    return render_template("expenses-table.html", expenses=expense_list, categories=category_list)
+            flash(message="Expense has been deleted.", category="info")
+
+            return redirect(url_for('expenses_table'))
+        
+        elif "searchExpense" in request.form:
+            query = str(request.form.get("search-expense"))
+            length, results = SearchExpense(query, current_user.id)
+
+            if length == 0:
+                flash(message="No results found", category="info")
+
+            return render_template("expenses.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors, length=length, results=results)
+
+    return render_template("expenses-table.html", expenses=expense_list, categories=category_list, labels=labels, values=values, colors=colors)
 
 @app.route("/tracker")
 @login_required

@@ -9,6 +9,26 @@
 {% endblock %}
 
 {% block content %}
+    {% if results %}
+        <!-- search expenses offcanvas -->
+        <div class="offcanvas offcanvas-start show text-bg-dark search-results" tabindex="-1" id="offcanvas" aria-labelledby="offcanvasLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasLabel">SEARCH RESULTS</h5>
+                <a href="{{url_for('expenses')}}" class="btn-close" style="background-color: #fff;"></a>
+            </div>
+            <div class="offcanvas-body">
+                <h5>"{{length}}" Results Found</h5>
+                {% for result in results %}                            
+                    <div class="expense-box" style="margin-top: 3%;">
+                        <small>{{result.time}} | {{result.date}}</small>
+                        <h5 style="margin-bottom: 0; margin-top: 0.5%;">{{result.name}}</h5>
+                        <h4 style="margin-bottom: 0; margin-top: 1%;"><i class="fa-solid fa-indian-rupee-sign"></i> {{result.amount}} | {{result.category}}</h4>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
     <!-- create expense offcanvas -->
     <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="addExpenseOffcanvas" aria-labelledby="addExpenseOffcanvasLabel">
         <div class="offcanvas-header">
@@ -44,7 +64,7 @@
                     <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}} <div class="vr"></div> <i class="fa-solid fa-square" style="color: {{expense.color}};"></i> {{expense.category}}</h3>
                     <small>
                         <form method="post">
-                            <input type="hidden" name="deleteExpenseID">
+                            <input type="hidden" name="deleteExpenseID" value="{{expense.id}}">
                             <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i> Delete Expense</button>
                         </form>
                     </small>
@@ -65,6 +85,39 @@
                     </tr>
                 {% endfor %}
             </table>
+
+            <div class="canvas-div">
+                <h5>Expenses Share</h5>
+                <canvas id="categoryShareChart"></canvas>
+            </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // expense share chart js
+        var labels = {{ labels | safe }};
+        var values = {{ values | safe }};
+        var colors = {{ colors | safe }};
+
+        var ctx = document.getElementById("categoryShareChart").getContext("2d");
+        var analysisChart = new Chart(ctx, {
+            type: "pie",
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "Total Expenditure",
+                        data: values,
+                        backgroundColor: colors,
+                        borderColor: "rgb(255, 255, 255)",
+                    }
+                ]
+            },
+            options: {
+                responsive: false,
+            }
+        });
+    </script>
 {% endblock %}

@@ -75,3 +75,23 @@ def CreateExpense(name: str, category: str, color: str, time: datetime.datetime,
     except Exception as exception:
         return f"Error in creating expense: {exception}", "danger"
     
+# SearchExpense searches for a expense based on a recieved query
+def SearchExpense(query: str, user: int):
+    results = Expense.query.filter(Expense.name.contains(query)).filter_by(user=user).all()
+    result_list = []
+    for result in results:
+        result_dict = {
+            "id": result.id,
+            "name": result.name,
+            "category": result.category,
+            "amount": result.amount,
+            "time": result.time.strftime("%H:%M"),
+            "date": result.date,
+            "user": result.user
+        }
+
+        result_list.append(result_dict)
+
+    length = len(result_list)
+    
+    return length, result_list
