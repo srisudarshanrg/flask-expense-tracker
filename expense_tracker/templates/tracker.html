@@ -81,6 +81,36 @@
                 <canvas id="category-graph-display"></canvas>
             </div>
         </div>
+
+        <div class="date-range-search-container">
+            <h3>Get Expenses For A Date Range</h3>
+            <form method="post">
+                <div class="row">
+                    <div class="col">
+                        <input type="date" name="dateRangeOne" id="dateRangeOne" class="form-control">
+                    </div>
+                    <div class="col">
+                        <input type="date" name="dateRangeTwo" id="dateRangeTwo" class="form-control">
+                    </div>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary">Search</button>
+
+                {% if dateranges %}
+                    <hr>
+                    <div class="results-daterange" style="margin-top: 1%;">
+                        <h4>Results</h4>
+                        {% for each in dateranges %}
+                            <div class="daterange-card">
+                                <small>{{each.date}} <div class="vr"></div> {{each.time}}</small>
+                                <h3>{{each.name}}</h3>
+                                <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{each.amount}} <div class="vr"></div> {{each.category}}</h3>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </form>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -96,7 +126,6 @@
             backgroundColor: "#fff",
             class: "datepicker",
         });
-
 
         // expense by DATE graph
         var labels_date = {{ labels_date | safe }};

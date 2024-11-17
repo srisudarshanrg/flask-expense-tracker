@@ -261,6 +261,35 @@ def tracker():
 
             return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date, search_expenses=search_expenses_list, length_search=length, date=converted_date, recieved_date=recieved_date)
 
+        elif "dateRangeOne" in request.form:
+            dateOne = request.form.get("dateRangeOne")
+            dateTwo = request.form.get("dateRangeTwo")
+
+            dateOneConverted = datetime.datetime.strptime(dateOne, "%Y-%m-%d")
+            dateTwoConverted = datetime.datetime.strptime(dateTwo, "%Y-%m-%d")
+
+            query = db.session.query(Expense).filter((Expense.time < dateTwoConverted) & (Expense.time > dateOneConverted)).all()
+            query_list = []
+            for each in query:
+                dict = {
+                    "id": each.id,
+                    "name": each.name,
+                    "category": each.category,
+                    "amount": each.amount,
+                    "time": each.time.strftime("%H:%M"),
+                    "date": each.date,
+                    "user": each.user,
+                }
+
+                query_list.append(dict)
+
+            length = len(query_list)
+
+            if length > 0:
+                return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date, dateranges=query_list, daterange_length=length)
+            else:
+                flash(message=f"No results for expenses between {dateOne} and {dateTwo}", category="info")
+
     return render_template("tracker.html", category_expenses=category_expenses_list, labels_category=labels_category, values_category=values_category, labels_date=labels_date, values_date=values_date)
 
 @app.route("/budget", methods=["GET", "POST"])
