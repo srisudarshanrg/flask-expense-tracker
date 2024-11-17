@@ -56,5 +56,32 @@
 }
 
 .canvas-div canvas {
-    width: 57%;
+    width: 90%;
+}
+
+.delete-expense-btn {
+    background-color: rgb(27, 27, 27);
+    border: 1px solid #ff1000;
+    border-radius: 5px;
+    color: #ff1000;
+    transition: 0.3s;
+    font-size: 0.9375rem;
+}
+
+.delete-expense-btn:hover {
+    background-color: #ff1000;
+    color: #fff;
+    transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+    .canvas-div canvas {
+        width: 100%;
+    }
+
+    .expenses-row {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }

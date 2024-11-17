@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Expenses Table | RaptorExpenses
+    Expenses Table | ByteTracker
 {% endblock %}
 
 {% block css %}
@@ -52,49 +52,53 @@
         <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 expense-table">
             <h2>Recent Expenses</h2>
             <div class="btn-group gap-1">
-                <button class="btn btn-success"data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
-                <a class="btn btn-success" href="{{url_for('expenses')}}"><i class="fa-solid fa-list"></i> View as List</a>
+                <button class="btn btn-primary"data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
+                <a class="btn btn-primary" href="{{url_for('expenses')}}"><i class="fa-solid fa-list"></i> List View</a>
             </div>
-            <table class="table table-dark table-striped table-hover">
-                <thead>
-                    <td>Expense</td>
-                    <td>Category</td>
-                    <td>Expenditure</td>
-                    <td>Time</td>
-                    <td>Date</td>
-                    <td style="color: #ff1000; text-align: center;"><i class="fa-solid fa-trash-can"></i></td>
-                </thead>
-                {% for expense in expenses %}
-                    <tr>
-                        <td>{{expense.name}}</td>
-                        <td>{{expense.category}}</td>
-                        <td><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}}</td>
-                        <td>{{expense.time}}</td>
-                        <td>{{expense.date}}</td>
-                        <td style="text-align: center;">
-                            <form method="post">
-                                <input type="hidden" name="deleteExpenseID" value="{{expense.id}}">
-                                <button type="submit" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <div class="expense-table">
+                <table class="table table-dark table-striped table-hover">
+                    <thead>
+                        <td>Expense</td>
+                        <td>Category</td>
+                        <td>Expenditure</td>
+                        <td>Time</td>
+                        <td>Date</td>
+                        <td style="color: #ff1000; text-align: center;"><i class="fa-solid fa-trash-can"></i></td>
+                    </thead>
+                    {% for expense in expenses %}
+                        <tr>
+                            <td>{{expense.name}}</td>
+                            <td>{{expense.category}}</td>
+                            <td><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}}</td>
+                            <td>{{expense.time}}</td>
+                            <td>{{expense.date}}</td>
+                            <td style="text-align: center;">
+                                <form method="post">
+                                    <input type="hidden" name="deleteExpenseID" value="{{expense.id}}">
+                                    <button type="submit" class="btn btn-outline-danger"><i class="fa-regular fa-trash-can"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
             <h2>Analysis</h2>
-            <table class="table table-dark table-striped table-hover">
-                <thead>
-                    <td>Category</td>
-                    <td>Total Expenditure</td>
-                </thead>
-                {% for category in categories %}
-                    <tr>
-                        <td>{{category.category}}</td>
-                        <td><i class="fa-solid fa-indian-rupee-sign"></i> {{category.amount}}</td>
-                    </tr>
-                {% endfor %}
-            </table>
+            <div class="category-table">
+                <table class="table table-dark table-striped table-hover">
+                    <thead>
+                        <td>Category</td>
+                        <td>Total Expenditure</td>
+                    </thead>
+                    {% for category in categories %}
+                        <tr>
+                            <td>{{category.category}}</td>
+                            <td><i class="fa-solid fa-indian-rupee-sign"></i> {{category.amount}}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
 
             <div class="canvas-div-whole">
                 <h5>Expenses Share</h5>

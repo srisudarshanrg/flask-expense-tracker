@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{category}} | RaptorExpenses
+    {{category}} | ByteTracker
 {% endblock %}
 
 {% block css %}
@@ -15,7 +15,7 @@
         <div class="expense-row">
             {% for expense in expenses %}   
                 <div class="expense">
-                    <header>{{expense.time}} / {{expense.date}}</header>
+                    <header>{{expense.date}} <div class="vr" style="background-color: #000000; padding: 1px;"></div> {{expense.time}}</header>
                     <h3 style="margin-top: 1%;">{{expense.name}}</h3>
                     <h2><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}}</h2>
                     <hr>

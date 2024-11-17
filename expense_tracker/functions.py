@@ -136,15 +136,20 @@ def GetBudgets(user: int) -> list:
 
             budget_list.append(budget_dict)
 
-        return budget_list, labels, expense_values, budget_values
+        total_expense = sum(expense_values)
+        total_budget = sum(budget_values)
+
+        total_difference = total_budget - total_expense
+
+        return budget_list, labels, expense_values, budget_values, total_expense, total_budget, total_difference
     
     except Exception as exception:
         return f"Error getting budgets: {exception}"
     
 # CreateBudget creates a budget in the database
 def CreateBudget(category: str, amount: int, user: int) -> str:
-    exists = Budget.query.filter_by(category=category, user=user).first()
     category = category.upper()
+    exists = Budget.query.filter_by(category=category, user=user).first()    
     if exists != None:
         exists.amount = amount
         db.session.commit()

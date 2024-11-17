@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Expenses | RaptorExpenses
+    Expenses | ByteTracker
 {% endblock %}
 
 {% block css %}
@@ -53,21 +53,23 @@
             <h2>Recent Expenses</h2>
 
             <div class="btn-group gap-1" style="margin-bottom: 1%;">
-                <button class="btn btn-success" data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
-                <a href="{{url_for('expenses_table')}}" class="btn btn-success"><i class="fa-solid fa-table"></i> View as Table</a>
+                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addExpenseOffcanvas"><i class="fa-solid fa-plus"></i> Add Expense</button>
+                <a href="{{url_for('expenses_table')}}" class="btn btn-primary"><i class="fa-solid fa-table"></i> Table View</a>
             </div>            
             
             {% for expense in expenses %}
                 <div class="expense-container">
-                    <small>{{expense.time}} <div class="vr"></div> {{expense.date}}</small>
+                    <div style="display: flex; flex-direction: row; gap: 10px;">
+                        <small>{{expense.date}} <div class="vr"></div> {{expense.time}}</small>
+                        <small>
+                            <form method="post">
+                                <input type="hidden" name="deleteExpenseID" value="{{expense.id}}">
+                                <button type="submit" class="delete-expense-btn"><i class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </small>
+                    </div>
                     <h3>{{expense.name}}</h3>
                     <h3><i class="fa-solid fa-indian-rupee-sign"></i> {{expense.amount}} <div class="vr"></div> <i class="fa-solid fa-square" style="color: {{expense.color}};"></i> {{expense.category}}</h3>
-                    <small>
-                        <form method="post">
-                            <input type="hidden" name="deleteExpenseID" value="{{expense.id}}">
-                            <button type="submit" class="btn btn-outline-danger"><i class="fa-solid fa-trash-can"></i> Delete Expense</button>
-                        </form>
-                    </small>
                 </div>
             {% endfor %}
         </div>

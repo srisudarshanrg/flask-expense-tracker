@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Budget | RaptorExpenses
+    Budget | ByteTracker
 {% endblock %}
 
 {% block css %}
@@ -51,6 +51,34 @@
         <div class="budget-graph-container">
             <h3>Budget Against Expense</h3>
             <canvas id="budget-against-expense"></canvas>    
+        </div>
+
+        <hr style="border: 2px solid #fff;">
+
+        <div class="summary-table">
+            <h2>Budget Report</h2>
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <td>Category</td>
+                    <td>Expenditure</td>
+                    <td>Budget</td>
+                    <td>Difference</td>
+                </thead>
+                {% for budget in budgets %}
+                    <tr>
+                        <td>{{budget.category}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign"></i> {{budget.expense_amount}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign"></i> {{budget.budget_amount}}</td>
+                        <td><i class="fa-solid fa-indian-rupee-sign"></i> {{budget.difference}}</td>
+                    </tr>
+                {% endfor %}
+                <tfoot>
+                    <td><h3>TOTAL</h3></td>
+                    <td><h3><i class="fa-solid fa-indian-rupee-sign"></i> {{total_expense}}</h3></td>
+                    <td><h3><i class="fa-solid fa-indian-rupee-sign"></i> {{total_budget}}</h3></td>
+                    <td><h3><i class="fa-solid fa-indian-rupee-sign"></i> {{total_difference}}</h3></td>
+                </tfoot>
+            </table>
         </div>
     </div>
 

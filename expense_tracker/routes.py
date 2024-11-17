@@ -278,9 +278,9 @@ def budget():
 
             return redirect(url_for('budget'))
         
-    budgets, labels, expense_values, budget_values = GetBudgets(current_user.id)
+    budgets, labels, expense_values, budget_values, total_expense, total_budget, total_difference = GetBudgets(current_user.id)
 
-    return render_template("budget.html", budgets=budgets, labels=labels, expense_values=expense_values, budget_values=budget_values)
+    return render_template("budget.html", budgets=budgets, labels=labels, expense_values=expense_values, budget_values=budget_values, total_expense=total_expense, total_budget=total_budget, total_difference=total_difference)
 
 @app.route("/profile")
 def profile():
