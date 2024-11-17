@@ -180,6 +180,7 @@ def tracker():
     labels_date = []
     values_date = []
 
+    # graph for expenses by category
     for category in categories:
         total_amount = 0
         category_rows = Expense.query.filter_by(category=category[0], user=current_user.id).all()
@@ -196,6 +197,7 @@ def tracker():
 
     n = 10
 
+    # graph for only expenses by date
     while n >= 0:
         day_before = datetime.date.today() - datetime.timedelta(days=n)
         day_before = day_before.strftime("%d %b %Y")

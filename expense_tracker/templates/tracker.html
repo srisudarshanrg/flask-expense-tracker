@@ -95,9 +95,10 @@
             todayHighlight: false,
             backgroundColor: "#fff",
             class: "datepicker",
-        }); 
+        });
 
-        // date graph
+
+        // expense by DATE graph
         var labels_date = {{ labels_date | safe }};
         var data_date = {{ values_date | safe }};
 
@@ -141,7 +142,7 @@
             }
         });
 
-        // category graph
+        // expense by CATEGORY graph
         var labels_category = {{ labels_category | safe }};
         var data_category = {{ values_category | safe }};
 
