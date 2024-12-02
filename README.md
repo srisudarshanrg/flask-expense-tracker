@@ -2,7 +2,7 @@
 ## Description
 RaptorExpenses(Flask) is a web application that helps you track your expenses and compare it against a user defined budget. As the name suggests, it is made on a flask(python) web server.
 
-Deployed website: [sudarshanraptor.pythonanywhere.com](https://sudarshanraptor.pythonanywhere.com)
+Deployed website: [sudarshanraptor1900.pythonanywhere.com](https://sudarshanraptor.pythonanywhere.com)
 
 ## Features
 - Has a login/register functionality to track expenses of every individual
@@ -24,4 +24,4 @@ Deployed website: [sudarshanraptor.pythonanywhere.com](https://sudarshanraptor.p
 
 ## Website Link
 Deployed website link: 
-[sudarshanraptor.pythonanywhere.com](https://sudarshanraptor.pythonanywhere.com)
+[sudarshanraptor1900.pythonanywhere.com](https://sudarshanraptor.pythonanywhere.com)
